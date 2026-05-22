@@ -27,7 +27,6 @@ export const DocumentList = ({ query, on_count_change, is_menu_open }: DocumentL
 			if (generated_uri) {
 				const docx_title = generated_uri.split('/').pop() || `crafted_${selected_doc.title}`;
 				const pdf_title = docx_title.replace('.docx', '.pdf');
-				console.log('PDFCRAFT | sending to server...');
 				try {
 					const formData = new FormData();
 					formData.append('file', {
@@ -38,35 +37,26 @@ export const DocumentList = ({ query, on_count_change, is_menu_open }: DocumentL
 						method: 'POST', body: formData, headers: { 'Accept': 'application/pdf' },
 					});
 					const contentType = response.headers.get('content-type');
-					// console.log('PDFCRAFT | type of response:', contentType);
 					if (!response.ok) {
 						const errorText = await response.text();
 						console.log('PDFCRAFT | server error: ', errorText);
 						throw new Error(`server error: ${response.status}`);
 					}
 					if (contentType && !contentType.includes('application/pdf')) {
-						const rawText = await response.text();
-						console.log('PDFCRAFT | response: ', rawText);
-						alert(`server response: ${rawText}`);
-						return;
+						const rawText = await response.text(); alert(`server response: ${rawText}`); return;
 					}
-					const blob = await response.blob(); const reader = new FileReader();
-					const base64_data = await new Promise<string>((resolve, reject) => {
-						reader.onloadend = () => {
-							const result = reader.result as string;
-							resolve(result.split(',')[1])
-						};
-						reader.onerror = reject; reader.readAsDataURL(blob);
-					});
+					const arrayBuffer = await response.arrayBuffer();
+					const uint8 = new Uint8Array(arrayBuffer); const chunks: string[] = [];
+					for (let i = 0; i < uint8.length; i += 8192) {
+						chunks.push(String.fromCharCode.apply(null, uint8.subarray(i, i + 8192)));
+					}
+					const base64_data = btoa(chunks.join(''));
 					const pdf_uri = `${FileSystem.documentDirectory}${pdf_title}`;
 					await FileSystem.writeAsStringAsync(pdf_uri, base64_data, {
 						encoding: FileSystem.EncodingType.Base64,
 					});
 					if (await Sharing.isAvailableAsync()) { await Sharing.shareAsync(pdf_uri) }
-				} catch (error) {
-					console.log('PDFCRAFT | convertation error: ', error);
-					alert('server is waking up, wait about 40 seconds and press the button again.');
-				}
+				} catch (error) { alert('server is waking up, wait about 40 seconds and press the button again.') }
 			} else { alert('something went wrong while building :(') }
 			set_selected_doc(null);
 		}, 600);

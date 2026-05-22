@@ -1,5 +1,6 @@
 // @/app/index (pdfcraft-mobile)
-import React, { useState, useEffect } from 'react'; import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState, useEffect } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar, View, Text, Pressable, Modal, Platform, Linking } from 'react-native';
 import Constants from 'expo-constants'; import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutUp } from 'react-native-reanimated';
@@ -8,6 +9,7 @@ import { HeaderSearch } from '@/components/ui/header'; import { DocumentList } f
 import { theme_homescreen as theme, theme_menu, Colors } from '@/components/theme';
 
 export default function homescreen() {
+	const insets = useSafeAreaInsets();
 	// фразы в тайтле
 	const phrases = ['pdfcraft-mobile', 'ready to craft']; const [phrase_idx, set_phrase_idx] = useState(0);
 	useEffect(() => { const timer = setTimeout(() => { set_phrase_idx(1) }, 3000); return () => clearTimeout(timer) }, []);
@@ -19,7 +21,7 @@ export default function homescreen() {
 	<View style={theme.root}>
 		<StatusBar barStyle='light-content' translucent backgroundColor='transparent'/>
 		<View style={theme.bg}/>
-		<SafeAreaView style={theme.safe_area}>
+		<View style={{ flex: 1, paddingTop: insets.top }}>
 			<View style={theme.header}>
 				<View style={{ height: 40, overflow: 'hidden' }}>
 					<Animated.Text
@@ -41,7 +43,7 @@ export default function homescreen() {
 				</Animated.View>
 			)}
 			<DocumentList query={query} on_count_change={(count) => set_has_docs(count > 0)} is_menu_open={menu_visible}/>
-		</SafeAreaView>
+		</View>
 		<Modal
 			visible={menu_visible} animationType='slide'
 			transparent onRequestClose={() => set_menu_visible(false)}>

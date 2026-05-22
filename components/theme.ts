@@ -79,7 +79,7 @@ export const Elevation = {
 const c = Colors.dark; // Colors.light для светлой темы
 export const theme_homescreen = StyleSheet.create({
 	// root, header & background
-	root: { flex: 1, backgroundColor: c.surface }, safe_area: { flex: 1 },
+	root: { flex: 1, backgroundColor: c.surface },
 	bg: { ...StyleSheet.absoluteFillObject, backgroundColor: c.surface },
 	header: {
 		flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between',
@@ -158,7 +158,7 @@ export const theme_form = StyleSheet.create({
 	indicator_text: { color: Colors.dark.onSurface, marginTop: 16, fontFamily: 'GoogleSansBold' }
 });
 export const theme_menu = StyleSheet.create({
-	modal_bg: { flex: 1, backgroundColor: 'rgba(0,0,0,0.0)', justifyContent: 'flex-end' },
+	modal_bg: { flex: 1, backgroundColor: 'rgba(0,0,0,0)', justifyContent: 'flex-end' },
 	bg: {
 		backgroundColor: Colors.dark.surfaceContainerLow,
 		padding: 24, borderTopLeftRadius: 28, borderTopRightRadius: 28, paddingBottom: 40

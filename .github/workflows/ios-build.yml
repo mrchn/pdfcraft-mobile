@@ -30,6 +30,7 @@ jobs:
       - name: Build unsigned .ipa using xcodebuild
         run: |
           cd ios
+          pod install
 
           xcodebuild archive \
             -workspace *.xcworkspace \

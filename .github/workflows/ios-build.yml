@@ -25,49 +25,51 @@ jobs:
 
       - name: Generate native iOS project (expo-prebuild)
         run: |
-          npx expo prebuild --platform ios --clean
+          npx expo prebuild --platform ios --clean --no-install
 
       - name: Build unsigned .ipa using xcodebuild
         run: |
           cd ios
-          pod install
+          pod install --repo-update
 
-          xcodebuild archive \
-            -workspace *.xcworkspace \
-            -scheme $(basename *.xcodeproj .xcodeproj) \
-            -configuration Release \
-            -archivePath build/pdfcraft-mobile.xcarchive \
-            -destination generic/platform=iOS \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+          WORKSPACE=$(find . -maxdepth 1 -name "*.xcworkspace" | head -n 1)
+          PROJECT=$(find . -maxdepth 1 -name "*.xcodeproj" | head -n 1)
+          SCHEME=$(basename "$PROJECT" .xcodeproj)
 
-          cat > ExportOptions.plist <<EOF
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-            <key>method</key>
-            <string>development</string>
-            <key>signingStyle</key>
-            <string>manual</string>
-            <key>stripSwiftSymbols</key>
-            <true/>
-            <key>compileBitcode</key>
-            <false/>
-          </dict>
-          </plist>
-          EOF
+          if [ -n "$WORKSPACE" ]; then
+            xcodebuild archive \
+              -workspace "$WORKSPACE" \
+              -scheme "$SCHEME" \
+              -configuration Release \
+              -archivePath build/pdfcraft-mobile.xcarchive \
+              -destination generic/platform=iOS \
+              CODE_SIGN_IDENTITY="" \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_ALLOWED=NO
+          else
+            xcodebuild archive \
+              -project "$PROJECT" \
+              -scheme "$SCHEME" \
+              -configuration Release \
+              -archivePath build/pdfcraft-mobile.xcarchive \
+              -destination generic/platform=iOS \
+              CODE_SIGN_IDENTITY="" \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_ALLOWED=NO
+          fi
 
-          xcodebuild -exportArchive \
-            -archivePath build/pdfcraft-mobile.xcarchive \
-            -exportPath build/export \
-            -exportOptionsPlist ExportOptions.plist \
-            CODE_SIGNING_ALLOWED=NO
+          cd build/pdfcraft-mobile.xcarchive/Products/Applications/
+
+          mkdir Payload
+          cp -R *.app Payload/
+
+          zip -r ../../../../pdfcraft-mobile.ipa Payload
+
+          cd $GITHUB_WORKSPACE
 
       - name: Upload .ipa artifact
         uses: actions/upload-artifact@v4
         with:
           name: pdfcraft-mobile
-          path: ios/build/export/*.ipa
+          path: ios/pdfcraft-mobile.ipa
           retention-days: 14

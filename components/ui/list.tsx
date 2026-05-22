@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, Pressable, View, Text, ActivityIndicator } from 'react-native';
 import Animated, { FadeInDown, LinearTransition, FadeIn, FadeOut } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -18,6 +19,7 @@ export interface Doc { id: string; title: string; size: string; date: string; ic
 interface DocumentListProps { query: string; on_count_change: (count: number) => void; is_menu_open: boolean }
 
 export const DocumentList = ({ query, on_count_change, is_menu_open }: DocumentListProps) => {
+	const insets = useSafeAreaInsets();
 	const [documents, set_documents] = useState<Doc[]>([]);
 	const [form_visible, set_form_visible] = useState(false);
 	const [detected_fields, set_detected_fields] = useState<string[]>([]);
@@ -59,11 +61,9 @@ export const DocumentList = ({ query, on_count_change, is_menu_open }: DocumentL
 					}
 					const base64_data = btoa(chunks.join(''));
 					const pdf_uri = `${FileSystem.documentDirectory}${pdf_title}`;
-					await FileSystem.writeAsStringAsync(pdf_uri, base64_data, {
-						encoding: FileSystem.EncodingType.Base64,
-					});
+					await FileSystem.writeAsStringAsync(pdf_uri, base64_data, { encoding: FileSystem.EncodingType.Base64 });
 					set_is_converting(false);
-					if (await Sharing.isAvailableAsync()) { await Sharing.shareAsync(pdf_uri) }
+					if (await Sharing.isAvailableAsync()) { await Sharing.shareAsync(pdf_uri) };
 				} catch (error) { alert('server is waking up, wait about 40 seconds and press the button again.') }
 			} else { alert('something went wrong while building :(') }
 			set_selected_doc(null);
@@ -214,9 +214,13 @@ export const DocumentList = ({ query, on_count_change, is_menu_open }: DocumentL
 			visible={form_visible} on_close={() => set_form_visible(false)}
 			fields={detected_fields} on_submit={handle_create_contract}/>
 		{is_converting && (
-			<View style={theme.indicator}>
-				<ActivityIndicator size='large' color={Colors.dark.primary}/>
-				<Text style={theme.indicator_text}>crafting...</Text>
+			<View
+				style={{
+					position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+					backgroundColor: 'rgba(0,0,0,0.6)',
+					justifyContent: 'center', alignItems: 'center', zIndex: 9999, elevation: 9999, }}>
+				<ActivityIndicator size='large' color={Colors.dark.primary} />
+				<Text style={{ color: Colors.dark.onSurface, marginTop: 16, fontFamily: 'GoogleSansBold' }}>crafting</Text>
 			</View>
 		)}
 	</GestureHandlerRootView>

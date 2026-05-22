@@ -17,14 +17,16 @@ export const ClientForm = ({ visible, on_close, fields = [], on_submit }: Client
 	return (
 	<Modal visible={visible} animationType='slide' presentationStyle='pageSheet'>
 		<KeyboardAvoidingView 
-			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}  style={{ flex: 1, backgroundColor: '#1C1C1E' }}
+			behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+			style={{ flex: 1, backgroundColor: '#1C1C1E'}}
+			keyboardVerticalOffset={Platform.OS === 'ios' ? 16 : 16}
 		>
 			<View style={theme.header}>
 				<Text style={theme.title}></Text>
 				<TouchableOpacity onPress={on_close}><Ionicons name='close' size={24} color='#FFF'/></TouchableOpacity>
 			</View>
 			<ScrollView contentContainerStyle={theme.scroll_content}>
-				<Text style={theme.section_title}>document variables</Text>
+				<Text style={theme.section_title}>variables</Text>
 				{fields.length > 0 ? (
 					fields.map((field) => (
 						<TextInput
@@ -35,10 +37,12 @@ export const ClientForm = ({ visible, on_close, fields = [], on_submit }: Client
 				) : (
 				<Text style={{ color: '#FF453A', marginTop: 10, textAlign: 'center' }}>fields is empty</Text>
 				)}
-				<TouchableOpacity style={theme.submit_btn} onPress={handle_submit}>
-					<Text style={theme.submit_text}>Generate Document</Text>
-				</TouchableOpacity>
 			</ScrollView>
+			<View style={{ paddingHorizontal: 20, paddingBottom: Platform.OS === 'ios' ? 50 : 20, backgroundColor: '#1C1C1E' }}>
+				<TouchableOpacity style={theme.submit_btn} onPress={handle_submit}>
+					<Text style={theme.submit_text}>craft</Text>
+				</TouchableOpacity>
+			</View>
 		</KeyboardAvoidingView>
 	</Modal>
 	)

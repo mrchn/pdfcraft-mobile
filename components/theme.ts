@@ -133,27 +133,29 @@ export const theme_homescreen = StyleSheet.create({
 });
 export const theme_form = StyleSheet.create({
 	header: {
-		flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20,
-		borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: c.outlineVariant,
-		backgroundColor: c.surfaceContainerLow,
+		flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20
 	},
 	title: { ...TypeScale.titleLarge, color: c.onSurface, }, scroll_content: { padding: 20 },
 	section_title: {
-		...TypeScale.labelLarge, color: c.primary, textTransform: 'uppercase',
-		marginBottom: 10, marginTop: 20, letterSpacing: 0.8,
+		...TypeScale.labelLarge, color: c.primary, textTransform: 'uppercase', fontSize: 20,
+		marginBottom: 10, marginTop: 20, letterSpacing: 0.8, fontFamily: 'CaveatBold'
 	},
 	input: { // filled text field — m3 standard
 		backgroundColor: c.surfaceContainerHighest, color: c.onSurface, padding: 16, marginBottom: 12,
 		borderRadius: Shape.extraSmall, borderBottomWidth: 1, borderBottomColor: c.outline, ...TypeScale.bodyLarge,
 	},
 	submit_btn: { // filled button — m3 primary action
-		backgroundColor: c.primary, paddingVertical: 16, paddingHorizontal: 24,
-		borderRadius: Shape.full, alignItems: 'center', marginTop: 20,
+		alignSelf: 'center',
+		backgroundColor: c.primary, paddingVertical: 16, paddingHorizontal: 14,
+		borderRadius: Shape.full, alignItems: 'center', marginTop: 20, width: '75%',
 	},
-	submit_text: { color: c.onPrimary, ...TypeScale.labelLarge, fontWeight: '700', },
+	submit_text: {
+		color: c.onPrimary, ...TypeScale.labelLarge, fontWeight: '700',
+		fontFamily: 'GoogleSansBold', fontSize: 18
+	},
 	indicator: {
 		position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center',
-		backgroundColor: 'rgba(20,18,24,0.8)', justifyContent: 'center', zIndex: 9999
+		backgroundColor: 'rgba(0,0,0,0.0)', justifyContent: 'center', zIndex: 9999
 	},
 	indicator_text: { color: Colors.dark.onSurface, marginTop: 16, fontFamily: 'GoogleSansBold' }
 });

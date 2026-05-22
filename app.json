@@ -1,11 +1,11 @@
 {
 	"expo": {
-		"name": "pdfcraft", "slug": "pdfcraft-mobile", "version": "0.1.0",
+		"name": "pdfcraft", "slug": "pdfcraft-mobile", "version": "0.1.1",
 		"orientation": "portrait", "icon": "./assets/images/icon.png", "scheme": "pdfcraftmobile",
 		"userInterfaceStyle": "automatic", "newArchEnabled": true,
-		"ios": { "supportsTablet": true, "bundleIdentifier": "ru.mrchn.craft", "buildNumber": "1" },
+		"ios": { "supportsTablet": true, "bundleIdentifier": "ru.mrchn.craft", "buildNumber": "2" },
 		"android": {
-			"package": "ru.mrchn.craft", "versionCode": 1,
+			"package": "ru.mrchn.craft", "versionCode": 2,
 			"adaptiveIcon": {
 				"backgroundColor": "#FFFFFF",
 				"foregroundImage": "./assets/images/android-icon-foreground.png",

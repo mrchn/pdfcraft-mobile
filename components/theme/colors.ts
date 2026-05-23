@@ -1,0 +1,86 @@
+// @/components/theme/colors
+
+export const Colors = {
+
+	light: {
+		primary: '#6750A4',
+		onPrimary: '#FFFFFF',
+		primaryContainer: '#EADDFF',
+		onPrimaryContainer: '#21005D',
+		secondary: '#625B71',
+		onSecondary: '#FFFFFF',
+		secondaryContainer: '#E8DEF8',
+		onSecondaryContainer: '#1D192B',
+		tertiary: '#7D5260',
+		onTertiary: '#FFFFFF',
+		tertiaryContainer: '#FFD8E4',
+		onTertiaryContainer: '#31111D',
+		error: '#B3261E',
+		onError: '#FFFFFF',
+		errorContainer: '#F9DEDC',
+		onErrorContainer: '#410E0B',
+		outline: '#79747E',
+		outlineVariant: '#CAC4D0',
+		scrim: '#000000',
+		inversePrimary: '#D0BCFF',
+		inverseSurface: '#313033',
+		inverseOnSurface: '#F4EFF4',
+
+		background: '#FEF7FF',
+		tint: '#6750A4',
+		icon: '#49454F',
+		tabIconDefault: '#79747E',
+		tabIconSelected: '#6750A4',
+
+		surface: '#FEF7FF',
+		onSurface: '#1C1B1F',
+		surfaceVariant: '#E7E0EC',
+		onSurfaceVariant: '#49454F',
+		surfaceContainerLowest: '#FFFFFF',
+		surfaceContainerLow: '#F7F2FA',
+		surfaceContainer: '#F3EDF7',
+		surfaceContainerHigh: '#ECE6F0',
+		surfaceContainerHighest: '#E6E0E9'
+
+	}, dark: {
+		primary: '#D0BCFF',
+		onPrimary: '#381E72',
+		primaryContainer: '#4F378B',
+		onPrimaryContainer: '#EADDFF',
+		secondary: '#CCC2DC',
+		onSecondary: '#332D41',
+		secondaryContainer: '#4A4458',
+		onSecondaryContainer: '#E8DEF8',
+		tertiary: '#EFB8C8',
+		onTertiary: '#492532',
+		tertiaryContainer: '#633B48',
+		onTertiaryContainer: '#FFD8E4',
+		error: '#F2B8B5',
+		onError: '#601410',
+		errorContainer: '#8C1D18',
+		onErrorContainer: '#F9DEDC',
+		outline: '#938F99',
+		outlineVariant: '#49454F',
+		scrim: '#000000',
+		inversePrimary: '#6750A4',
+		inverseSurface: '#E6E0E9',
+		inverseOnSurface: '#322F35',
+
+		background: '#141218',
+		tint: '#D0BCFF',
+		icon: '#CAC4D0',
+		tabIconDefault: '#938F99',
+		tabIconSelected: '#D0BCFF',
+
+		surface: 'black',
+		onSurface: '#E6E0E9',
+		surfaceVariant: '#49454F',
+		onSurfaceVariant: '#CAC4D0',
+		surfaceContainerLowest: '#0F0D13',
+		surfaceContainerLow: '#1D1B20',
+		surfaceContainer: '#211F26',
+		surfaceContainerHigh: '#2B2930',
+		surfaceContainerHighest: '#36343B'
+	}
+
+} as const;

@@ -1,4 +1,4 @@
-// @/components/ui/form (pdfcraft-mobile)
+// @/components/ui/form
 
 // react components
 import React, { useState, useEffect } from 'react';
@@ -9,7 +9,8 @@ import { KeyboardAvoidingView, useColorScheme } from 'react-native';
 
 // expo and project components
 import { Ionicons } from '@expo/vector-icons';
-import { form as theme, Colors } from '@/components/theme';
+import { form as theme } from '@/components/theme';
+import { Colors } from '@/components/theme/colors';
 
 interface ClientFormProps {
 	visible: boolean; on_close: () => void; fields: string[];
@@ -24,11 +25,9 @@ export const ClientForm = ({
 	const system_scheme = useColorScheme();
 	const theme_mode:ThemeType=system_scheme==='dark'?'dark':'light';
 	const sx = theme(theme_mode);
-	const active_colors = Colors[theme_mode] || Colors.dark;
 
-	const [
-		form_data,
-		set_form_data
+	const [ // стейты полей в форме
+		form_data, set_form_data
 	] = useState<Record<string, string>>({});
 
 	useEffect(() => {
@@ -43,29 +42,20 @@ export const ClientForm = ({
 
 	return (
 		<Modal
-			visible={visible}
-			animationType='slide'
+			visible={visible} animationType='slide'
 			presentationStyle='pageSheet'
 		>
 			<KeyboardAvoidingView 
 				behavior={
 					Platform.OS === 'ios' ? 'padding' : 'height'
 				}
-				style={{
-					flex: 1, backgroundColor: '#1C1C1E'
-				}}
-				keyboardVerticalOffset={
-					Platform.OS === 'ios' ? 16 : 16
-				}
+				style={sx.safe} keyboardVerticalOffset={16}
 			>
 				<View style={sx.header}>
 					<Text style={sx.title}></Text>
-					<TouchableOpacity
-						onPress={on_close}
-					>
+					<TouchableOpacity onPress={on_close}>
 						<Ionicons
-							name='close' size={24}
-							color='#FFF'
+							name='close' size={24} color='#FFF'
 						/>
 					</TouchableOpacity>
 				</View>
@@ -76,8 +66,7 @@ export const ClientForm = ({
 					{fields.length > 0 ? (
 						fields.map((field) => (
 							<TextInput
-								key={field}
-								style={sx.input}
+								key={field} style={sx.input}
 								placeholder={field}
 								placeholderTextColor='#636366'
 								value={form_data[field] || ''}
@@ -91,32 +80,19 @@ export const ClientForm = ({
 							/>
 						))
 					) : (
-						<Text
-							style={{
-								color: '#FF453A',
-								marginTop: 10,
-								textAlign: 'center'
-							}}
-						>
-							fields is empty
+						<Text style={sx.fields_empty}>
+							fields is empty :(
 						</Text>
 					)}
 				</ScrollView>
-				<View
-					style={{
-						paddingHorizontal: 20,
-						paddingBottom: Platform.OS === 'ios'?50:20,
-						backgroundColor: '#1C1C1E'
-					}}
-				>
-				<TouchableOpacity
-					style={sx.submit_btn}
-					onPress={handle_submit}
-				>
-					<Text style={sx.submit_text}>craft</Text>
-				</TouchableOpacity>
-			</View>
-		</KeyboardAvoidingView>
-	</Modal>
+				<View style={sx.submit_btn_wrap}>
+					<TouchableOpacity
+						style={sx.submit_btn} onPress={handle_submit}
+					>
+						<Text style={sx.submit_text}>craft</Text>
+					</TouchableOpacity>
+				</View>
+			</KeyboardAvoidingView>
+		</Modal>
 	)
 }

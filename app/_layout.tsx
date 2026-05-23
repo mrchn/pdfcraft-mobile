@@ -1,4 +1,4 @@
-// @/app/_layout (pdfcraft-mobile)
+// @/app/_layout
 
 // react components
 import React, { useEffect } from 'react';
@@ -17,6 +17,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 
+	// шрифты приложения
 	const [fontsLoaded, error] = useFonts({
 		GoogleSansRegular:
 			require('../assets/fonts/googlesans-regular.ttf'),
@@ -27,10 +28,10 @@ export default function RootLayout() {
 	});
 
 	const colorScheme = useColorScheme();
+
+	// splash прячется как только шрифты загружены
 	useEffect(() => {
-		if (fontsLoaded || error) {
-			SplashScreen.hideAsync()
-		}
+		if (fontsLoaded || error) { SplashScreen.hideAsync() }
 	}, [fontsLoaded, error]);
 
 	if (!fontsLoaded && !error) { return null; }

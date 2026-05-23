@@ -1,7 +1,7 @@
-// @/components/ui/list (pdfcraft-mobile)
+// @/components/ui/list
 
 // react components
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FlatList, Pressable, View, Text, Alert } from 'react-native';
 import { ActivityIndicator, useColorScheme } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
@@ -20,7 +20,9 @@ import * as Haptics from 'expo-haptics';
 // project components
 import * as pdfcraft from '@/components/pdfcraft';
 import { ClientForm } from '@/components/ui/form';
-import { home as theme, Colors, Shape } from '@/components/theme';
+import { home as theme } from '@/components/theme';
+import { Colors } from '@/components/theme/colors';
+import { Shape } from '@/components/theme/shapes';
 
 // interfaces
 export interface Doc {
@@ -29,9 +31,8 @@ export interface Doc {
 	uri: string;
 }
 interface DocumentListProps {
-	query: string;
-	on_count_change: (count: number) => void;
-	is_menu_open: boolean
+	query: string; is_menu_open: boolean;
+	on_count_change: (count: number) => void
 }
 
 export const DocumentList = ({
@@ -42,7 +43,6 @@ export const DocumentList = ({
 	const system_scheme = useColorScheme();
 	const theme_mode:ThemeType=system_scheme==='dark'?'dark':'light';
 	const sx = theme(theme_mode);
-	const active_colors = Colors[theme_mode] || Colors.dark;
 
 	const insets = useSafeAreaInsets();
 	const [documents, set_documents] = useState<Doc[]>([]);
@@ -120,6 +120,7 @@ export const DocumentList = ({
 			finally { set_is_loaded(true) }
 		}; load_documents();
 	}, []);
+
 	useEffect(() => { // авто сохранение при изменении списка
 		if (!is_loaded) return;
 		const save_documents = async () => {
@@ -131,11 +132,14 @@ export const DocumentList = ({
 		}; // сохраняем только если приложение уже загрузилось (чтобы не затереть пустой массив на старте)
 		save_documents();
 	}, [documents, is_loaded]);
+
 	// удаление из списка по id
 	const handle_delete_document = (id: string) => {
 		Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 		set_documents((prev_docs) => prev_docs.filter((doc) => doc.id !== id));
-	}; // и дальше добавление :>
+	};
+
+	// и дальше добавление :>
 	const handle_pick_document = async () => {
 		try {
 			Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -172,50 +176,66 @@ export const DocumentList = ({
 	};
 	const filtered = documents.filter((d) => d.title.toLowerCase().includes(query.toLowerCase()));
 	useEffect(() => { on_count_change(documents.length) }, [documents]);
-	// рендерим header (кол-во файлов)
-	const render_right_actions = (id: string) => { // удаление по свайпу
-		return (
+
+	const render_right_actions = useCallback((id: string) => (
 		<Pressable
-				android_ripple={{ color: 'rgba(255,255,255,0.2)' }} onPress={() => handle_delete_document(id)}
-				style={{
-					backgroundColor: Colors.dark.error, justifyContent: 'center',
-					alignItems: 'center', width: 80, height: '100%',
-				}}
+			onPress={() => handle_delete_document(id)}
+			android_ripple={{color: 'rgba(255,255,255,0.2)'}}
+			style={{
+				backgroundColor: Colors.dark.error,
+				justifyContent: 'center',
+				alignItems: 'center',
+				width: 80, height: '100%',
+			}}
 		>
 			<Ionicons name='trash' size={22} color='#FFF' />
 		</Pressable>
-		);
-	};
-	// рендерим файлы в списке
-	const render_item = ({ item, index }: { item: Doc; index: number }) => (
-	<Animated.View
-		entering={FadeInDown.duration(300).springify()} layout={LinearTransition.springify()}
-		style={{ borderRadius: Shape.large, overflow: 'hidden', marginBottom: 12 }}
-	>
-	<Swipeable
-		renderRightActions={() => render_right_actions(item.id)}
-		friction={2} rightThreshold={40}>
-		<Pressable
-			onPress={async () => {
-				Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-				set_selected_doc({ uri: item.uri, title: item.title });
-				const fields = await pdfcraft.parse_docx_templates(item.uri);
-				set_detected_fields(fields); set_form_visible(true);
+	), []);
+
+	// рендер карточек в списке
+	const render_item = useCallback(
+		({ item, index }: { item: Doc; index: number }) =>
+	(
+		<Animated.View
+			entering={FadeInDown.duration(300).springify()}
+			layout={LinearTransition.springify()}
+			style={{
+				borderRadius: Shape.large,
+				overflow: 'hidden', marginBottom: 12
 			}}
-			android_ripple={{ color: Colors.dark.onSurface + '1A' }}
-			style={[sx.row]}
 		>
-			<View style={[sx.icon_wrap, { backgroundColor: item.color + '22' }]}>
-				<Ionicons name={item.icon as any} size={22} color={item.color}/>
-			</View>
-			<View style={sx.row_meta}>
-				<Text style={sx.row_title} numberOfLines={1}>{item.title}</Text>
-				<Text style={sx.row_sub}>{item.size} · {item.date}</Text>
-			</View>
-		</Pressable>
-	</Swipeable>
-	</Animated.View>
-	);
+		<Swipeable
+			renderRightActions={() => render_right_actions(item.id)}
+			friction={2} rightThreshold={40}>
+			<Pressable
+				onPress={async () => {
+					Haptics.impactAsync(
+						Haptics.ImpactFeedbackStyle.Light
+					);
+					set_selected_doc({
+						uri: item.uri, title: item.title
+					});
+					const fields=await pdfcraft.parse_docx_templates(
+						item.uri
+					);
+					set_detected_fields(fields);
+					set_form_visible(true);
+				}}
+				android_ripple={{ color: Colors.dark.onSurface + '1A' }}
+				style={[sx.row]}
+			>
+				<View style={[sx.icon_wrap, { backgroundColor: item.color + '22' }]}>
+					<Ionicons name={item.icon as any} size={22} color={item.color}/>
+				</View>
+				<View style={sx.row_meta}>
+					<Text style={sx.row_title} numberOfLines={1}>{item.title}</Text>
+					<Text style={sx.row_sub}>{item.size} · {item.date}</Text>
+				</View>
+			</Pressable>
+		</Swipeable>
+		</Animated.View>
+	), [sx, render_right_actions]);
+
 	return (
 	<GestureHandlerRootView style={{ flex: 1 }}>
 		<FlatList

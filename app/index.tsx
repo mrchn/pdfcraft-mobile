@@ -1,4 +1,4 @@
-// @/app/index (pdfcraft-mobile)
+// @/app/index
 
 // react components
 import React, { useState, useEffect } from 'react';
@@ -17,7 +17,11 @@ import { Ionicons } from '@expo/vector-icons';
 // project components
 import { HeaderSearch } from '@/components/ui/header';
 import { DocumentList } from '@/components/ui/list';
-import { home as theme, Colors } from '@/components/theme';
+import { home as theme } from '@/components/theme';
+import { Colors } from '@/components/theme/colors';
+
+const PHRASES = ['pdfcraft-mobile', 'ready to craft'];
+const URL_GITHUB = 'https://github.com/mrchn/pdfcraft-mobile';
 
 export default function homescreen() {
 
@@ -25,15 +29,11 @@ export default function homescreen() {
 	const system_scheme = useColorScheme();
 	const theme_mode:ThemeType=system_scheme==='dark'?'dark':'light';
 	const sx = theme(theme_mode);
-	const active_colors = Colors[theme_mode] || Colors.dark;
 
 	const insets = useSafeAreaInsets();
-	const github = 'https://github.com/mrchn/pdfcraft-mobile';
 
 	// фразы в тайтле
-	const phrases = ['pdfcraft-mobile', 'ready to craft'];
 	const [phrase_idx, set_phrase_idx] = useState(0);
-
 	useEffect(() => { // таймер смены фраз
 		const timer = setTimeout(() => {
 			set_phrase_idx(1)
@@ -55,7 +55,7 @@ export default function homescreen() {
 			<View style={sx.bg}/>
 			<View style={{ flex: 1, paddingTop: insets.top }}>
 				<View style={sx.header}>
-					<View style={{ height: 40, overflow: 'hidden' }}>
+					<View style={sx.title_wrap}>
 						<Animated.Text
 							key={phrase_idx}
 							entering={
@@ -66,20 +66,17 @@ export default function homescreen() {
 							exiting={SlideOutUp.duration(100)}
 							style={sx.title}
 						>
-							{phrases[phrase_idx]}
+							{PHRASES[phrase_idx]}
 						</Animated.Text>
 					</View>
 					<Pressable
 						style={sx.header_btn}
+						android_ripple={sx.header_btn_ripple}
 						onPress={() => {
 							Haptics.impactAsync(
 								Haptics.ImpactFeedbackStyle.Light
 								);
 							set_menu_visible(true)
-						}}
-						android_ripple={{
-							color: 'rgba(208,188,255,0.2)',
-							borderless: true, radius: 20
 						}}
 					>
 						<Ionicons
@@ -95,8 +92,7 @@ export default function homescreen() {
 						exiting={FadeOut.duration(200)}
 					>
 						<HeaderSearch
-							query={query}
-							set_query={set_query}
+							query={query} set_query={set_query}
 						/>
 					</Animated.View>
 				)}
@@ -109,8 +105,7 @@ export default function homescreen() {
 				/>
 			</View>
 			<Modal
-				transparent
-				visible={menu_visible}
+				transparent visible={menu_visible}
 				animationType='slide'
 				onRequestClose={() => set_menu_visible(false)}
 			>
@@ -137,7 +132,7 @@ export default function homescreen() {
 							<Text
 								style={sx.menu_link}
 								onPress={
-									() => Linking.openURL(github)
+									() => Linking.openURL(URL_GITHUB)
 								}
 							>
 								github.com/mrchn/pdfcraft-mobile

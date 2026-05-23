@@ -1,4 +1,4 @@
-// @/components/ui/header (pdfcraft-mobile)
+// @/components/ui/header
 
 // react components
 import React, { useState, useRef } from 'react';
@@ -7,7 +7,8 @@ import { Pressable, useColorScheme, Text } from 'react-native';
 
 // expo and project components
 import { Ionicons } from '@expo/vector-icons';
-import { home as theme, Colors } from '@/components/theme';
+import { home as theme } from '@/components/theme';
+import { Colors } from '@/components/theme/colors';
 
 // описываем типы для пропсов хедера
 interface HeaderProps {
@@ -21,12 +22,8 @@ export const HeaderSearch = ({ query, set_query }: HeaderProps) => {
 	const system_scheme = useColorScheme();
 	const theme_mode:ThemeType=system_scheme==='dark'?'dark':'light';
 	const sx = theme(theme_mode);
-	const active_colors = Colors[theme_mode] || Colors.dark;
 
-	const [
-		is_search_focused,
-		set_is_search_focused
-	] = useState(false);
+	const [is_search_focused, set_is_search_focused] = useState(false);
 	const anim_cancel = useRef(new Animated.Value(0)).current;
 	const search_ref = useRef<TextInput>(null);
 
@@ -71,22 +68,18 @@ export const HeaderSearch = ({ query, set_query }: HeaderProps) => {
 					style={{ marginLeft: 10 }}
 				/>
 				<TextInput
-					ref={search_ref}
-					style={sx.search_input}
-					placeholder='search'
+					ref={search_ref} style={sx.search_input}
+					placeholder='search' onFocus={on_focus}
 					placeholderTextColor={Colors.dark.onSurfaceVariant}
 					value={query} onChangeText={set_query}
-					onFocus={on_focus}
 					onBlur={() => !query && on_cancel()}
-					returnKeyType='search'
-					clearButtonMode='never'
+					returnKeyType='search' clearButtonMode='never'
 					selectionColor={Colors.dark.primary}
 				/>
 			</View>
 			<Animated.View
 				style={{
-					width: cancel_width,
-					opacity: cancel_opacity,
+					width: cancel_width, opacity: cancel_opacity,
 					overflow: 'hidden'
 				}}
 			>

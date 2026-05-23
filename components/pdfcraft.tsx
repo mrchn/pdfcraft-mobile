@@ -1,21 +1,36 @@
-// @/components/pdfcraft (pdfcraft-mobile)
-import * as Crypto from 'expo-crypto'; import JSZip from 'jszip';
+// @/components/pdfcraft
+
+// expo, project and other components
 import * as FileSystem from 'expo-file-system/legacy';
+import * as Crypto from 'expo-crypto';
+import JSZip from 'jszip';
 
 const SECRET_SALT = 'YOUR_SUPER_SECRET_SALT';
 
 // делаем айди договора
 export const generate_contract_id = (): string => {
-	const year = new Date().getFullYear().toString().slice(-2); const random_bytes = Crypto.getRandomBytes(2);
-	const hex_token = Array.from(random_bytes).map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+	const year = new Date().getFullYear().toString().slice(-2);
+	const random_bytes = Crypto.getRandomBytes(2);
+	const hex_token = Array.from(random_bytes).map(
+		b => b.toString(16).padStart(2, '0'
+			)
+		).join('').toUpperCase();
 	return `${year}${hex_token}`;
 };
+
 // и дальше делаем хэш
-export const generate_signature_hash = async (user_id: string, contract_id: string, date: string): Promise<string> => {
+export const generate_signature_hash = async (
+	user_id: string, contract_id: string, date: string
+	): Promise<string> => {
+
 	const data_string = `${user_id}:${contract_id}:${date}:${SECRET_SALT}`;
-	const hash = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, data_string);
+	const hash = await Crypto.digestStringAsync(
+		Crypto.CryptoDigestAlgorithm.SHA256, data_string
+		);
 	return hash.toUpperCase();
+
 };
+
 // парсим docx (локально)
 export const parse_docx_templates = async (uri: string): Promise<string[]> => {
 	try {

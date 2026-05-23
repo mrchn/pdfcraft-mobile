@@ -1,37 +1,70 @@
 // @/components/ui/list (pdfcraft-mobile)
+
+// react components
 import React, { useState, useEffect } from 'react';
-import { FlatList, Pressable, View, Text, ActivityIndicator, Alert } from 'react-native';
-import Animated, { FadeInDown, LinearTransition, FadeIn, FadeOut } from 'react-native-reanimated';
+import { FlatList, Pressable, View, Text, Alert } from 'react-native';
+import { ActivityIndicator, useColorScheme } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { FadeInDown, LinearTransition } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+
+// expo components
 import { Ionicons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import * as Haptics from 'expo-haptics';
+
 // project components
 import * as pdfcraft from '@/components/pdfcraft';
 import { ClientForm } from '@/components/ui/form';
-import { theme_homescreen as theme, Colors, Shape } from '@/components/theme';
-// interfaces
-export interface Doc { id: string; title: string; size: string; date: string; icon: string; color: string; uri: string; }
-interface DocumentListProps { query: string; on_count_change: (count: number) => void; is_menu_open: boolean }
+import { home as theme, Colors, Shape } from '@/components/theme';
 
-export const DocumentList = ({ query, on_count_change, is_menu_open }: DocumentListProps) => {
+// interfaces
+export interface Doc {
+	id: string; title: string; size: string;
+	date: string; icon: string; color: string;
+	uri: string;
+}
+interface DocumentListProps {
+	query: string;
+	on_count_change: (count: number) => void;
+	is_menu_open: boolean
+}
+
+export const DocumentList = ({
+	query, on_count_change, is_menu_open
+	}: DocumentListProps) => {
+
+	// dynamic theme
+	const system_scheme = useColorScheme();
+	const theme_mode:ThemeType=system_scheme==='dark'?'dark':'light';
+	const sx = theme(theme_mode);
+	const active_colors = Colors[theme_mode] || Colors.dark;
+
 	const insets = useSafeAreaInsets();
 	const [documents, set_documents] = useState<Doc[]>([]);
 	const [form_visible, set_form_visible] = useState(false);
-	const [detected_fields, set_detected_fields] = useState<string[]>([]);
-	const [selected_doc, set_selected_doc] = useState<{ uri: string; title: string } | null>(null);
+	const [
+		detected_fields, set_detected_fields
+	] = useState<string[]>([]);
+	const [
+		selected_doc, set_selected_doc
+	] = useState<{ uri: string; title: string } | null>(null);
 	const [is_loaded, set_is_loaded] = useState(false);
-	const [is_converting, set_is_converting] = useState(false); // стейт блокировки во время конвертации
+	const [is_converting, set_is_converting] = useState(false);
 
-	const handle_create_contract = async (form_data: Record<string, string>) => {
+	const handle_create_contract = async (
+		form_data: Record<string, string>
+	) => {
 		if (!selected_doc) { return }
 		set_form_visible(false);
 		setTimeout(async () => {
-			const generated_uri = await pdfcraft.generate_docx(selected_doc.uri, form_data, selected_doc.title);
+			const generated_uri = await pdfcraft.generate_docx(
+				selected_doc.uri, form_data, selected_doc.title
+				);
 			if (generated_uri) {
 				const docx_title = generated_uri.split('/').pop() || `crafted_${selected_doc.title}`;
 				const pdf_title = docx_title.replace('.docx', '.pdf');
@@ -170,14 +203,14 @@ export const DocumentList = ({ query, on_count_change, is_menu_open }: DocumentL
 				set_detected_fields(fields); set_form_visible(true);
 			}}
 			android_ripple={{ color: Colors.dark.onSurface + '1A' }}
-			style={[theme.row]}
+			style={[sx.row]}
 		>
-			<View style={[theme.icon_wrap, { backgroundColor: item.color + '22' }]}>
+			<View style={[sx.icon_wrap, { backgroundColor: item.color + '22' }]}>
 				<Ionicons name={item.icon as any} size={22} color={item.color}/>
 			</View>
-			<View style={theme.row_meta}>
-				<Text style={theme.row_title} numberOfLines={1}>{item.title}</Text>
-				<Text style={theme.row_sub}>{item.size} · {item.date}</Text>
+			<View style={sx.row_meta}>
+				<Text style={sx.row_title} numberOfLines={1}>{item.title}</Text>
+				<Text style={sx.row_sub}>{item.size} · {item.date}</Text>
 			</View>
 		</Pressable>
 	</Swipeable>
@@ -187,31 +220,31 @@ export const DocumentList = ({ query, on_count_change, is_menu_open }: DocumentL
 	<GestureHandlerRootView style={{ flex: 1 }}>
 		<FlatList
 			data={filtered} keyExtractor={(d) => d.id} renderItem={render_item}
-			contentContainerStyle={theme.list_content} showsVerticalScrollIndicator={false}
+			contentContainerStyle={sx.list_content} showsVerticalScrollIndicator={false}
 			ListHeaderComponent={
 				filtered.length > 0 ? (
-					<Animated.View entering={FadeIn.duration(250)} exiting={FadeOut.duration(200)} style={theme.list_header}>
-						<Text style={theme.section_label}>
+					<Animated.View entering={FadeIn.duration(250)} exiting={FadeOut.duration(200)} style={sx.list_header}>
+						<Text style={sx.section_label}>
 							{filtered.length} {filtered.length === 1 ? 'document' : 'documents'}
 							{is_menu_open && ' (docx files)'}
 						</Text>
 					</Animated.View>
 				) : null
 			}
-			style={theme.list}
+			style={sx.list}
 			ListEmptyComponent={
-				<View style={theme.empty}>
+				<View style={sx.empty}>
 					<Ionicons name='folder-open-outline' size={48} color={Colors.dark.onSurfaceVariant}/>
-					<Text style={theme.empty_text}>no documents found</Text>
+					<Text style={sx.empty_text}>no documents found</Text>
 				</View>
 			}
 		/>
 		{!is_converting && (
-			<View style={theme.fab_wrap}>
+			<View style={sx.fab_wrap}>
 				<Pressable
 					onPress={handle_pick_document}
 					style={({ pressed }) => [
-						theme.fab,
+						sx.fab,
 						{ transform: [{ scale: pressed ? 0.92 : 1 }] }
 					]}
 					android_ripple={{ color: Colors.dark.onPrimary + '33', borderless: true }}>

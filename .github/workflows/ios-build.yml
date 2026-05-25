@@ -7,7 +7,7 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'false'
 
 jobs:
-  build-ios-unsigned:
+  build-ios:
     runs-on: macos-latest
 
     steps:
@@ -27,33 +27,14 @@ jobs:
         run: |
           npx expo prebuild --platform ios --clean --no-install
 
-      - name: Cache Xcode and Pods
-        uses: actions/cache@v4
-        with:
-          path: |
-            ios/Pods
-            ~/Library/Developer/Xcode/DerivedData
-          key: ${{ runner.os }}-xcode-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-xcode-
-
       - name: Build unsigned .ipa using xcodebuild
         run: |
           cd ios
-          export COCOAPODS_DISABLE_STATS=1
           pod install --repo-update
 
           WORKSPACE=$(find . -maxdepth 1 -name "*.xcworkspace" | head -n 1)
           PROJECT=$(find . -maxdepth 1 -name "*.xcodeproj" | head -n 1)
           SCHEME=$(basename "$PROJECT" .xcodeproj)
-          PBXPROJ_PATH="$PROJECT/project.pbxproj"
-          echo "Disabling code signing in $PBXPROJ_PATH..."
-
-          sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' "$PBXPROJ_PATH"
-          sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer";/CODE_SIGN_IDENTITY = "";/g' "$PBXPROJ_PATH"
-          sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Distribution";/CODE_SIGN_IDENTITY = "";/g' "$PBXPROJ_PATH"
-          sed -i '' '/DEVELOPMENT_TEAM =/d' "$PBXPROJ_PATH"
-          sed -i '' '/PROVISIONING_PROFILE_SPECIFIER =/d' "$PBXPROJ_PATH"
 
           if [ -n "$WORKSPACE" ]; then
             xcodebuild archive \
@@ -62,16 +43,9 @@ jobs:
               -configuration Release \
               -archivePath build/pdfcraft-mobile.xcarchive \
               -destination generic/platform=iOS \
-              -disablePackageRepositoryValidation \
-              -parallelizeTargets \
-              -jobs 4 \
-              -quiet \
               CODE_SIGN_IDENTITY="" \
               CODE_SIGNING_REQUIRED=NO \
-              CODE_SIGNING_ALLOWED=NO \
-              DEBUG_INFORMATION_FORMAT=dwarf \
-              COMPILER_INDEX_STORE_ENABLE=NO \
-              ONLY_ACTIVE_ARCH=YES
+              CODE_SIGNING_ALLOWED=NO
           else
             xcodebuild archive \
               -project "$PROJECT" \
@@ -79,16 +53,9 @@ jobs:
               -configuration Release \
               -archivePath build/pdfcraft-mobile.xcarchive \
               -destination generic/platform=iOS \
-              -disablePackageRepositoryValidation \
-              -parallelizeTargets \
-              -jobs 4 \
-              -quiet \
               CODE_SIGN_IDENTITY="" \
               CODE_SIGNING_REQUIRED=NO \
-              CODE_SIGNING_ALLOWED=NO \
-              DEBUG_INFORMATION_FORMAT=dwarf \
-              COMPILER_INDEX_STORE_ENABLE=NO \
-              ONLY_ACTIVE_ARCH=YES
+              CODE_SIGNING_ALLOWED=NO
           fi
 
           cd build/pdfcraft-mobile.xcarchive/Products/Applications/

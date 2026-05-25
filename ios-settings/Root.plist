@@ -7,15 +7,9 @@
 	<array>
 		<dict>
 			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-			<key>Title</key>
-			<string>pdfcraft-mobile settings</string>
-		</dict>
-		<dict>
-			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>local convert</string>
+			<string>Enable local conversion</string>
 			<key>Key</key>
 			<string>enable_local_convert</string>
 			<key>DefaultValue</key>
@@ -25,13 +19,13 @@
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 			<key>Title</key>
-			<string>about app</string>
+			<string>About app</string>
 		</dict>
 		<dict>
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 			<key>Title</key>
-			<string>version</string>
+			<string>Version</string>
 			<key>Key</key>
 			<string>app_version</string>
 			<key>DefaultValue</key>
@@ -41,11 +35,11 @@
 			<key>Type</key>
 			<string>PSTitleValueSpecifier</string>
 			<key>Title</key>
-			<string>developer</string>
+			<string>Developer</string>
 			<key>Key</key>
 			<string>app_developer</string>
 			<key>DefaultValue</key>
-			<string>mrchn</string>
+			<string>github.com/mrchn</string>
 		</dict>
 	</array>
 </dict>

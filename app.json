@@ -31,7 +31,6 @@
 		},
 		"plugins": [
 			"expo-router",
-			"expo-quick-actions",
 			"./plugins/settingsbundle.js"
 		],
 		"experiments": {

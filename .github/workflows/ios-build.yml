@@ -46,6 +46,14 @@ jobs:
           WORKSPACE=$(find . -maxdepth 1 -name "*.xcworkspace" | head -n 1)
           PROJECT=$(find . -maxdepth 1 -name "*.xcodeproj" | head -n 1)
           SCHEME=$(basename "$PROJECT" .xcodeproj)
+          PBXPROJ_PATH="$PROJECT/project.pbxproj"
+          echo "Disabling code signing in $PBXPROJ_PATH..."
+
+          sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' "$PBXPROJ_PATH"
+          sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer";/CODE_SIGN_IDENTITY = "";/g' "$PBXPROJ_PATH"
+          sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Distribution";/CODE_SIGN_IDENTITY = "";/g' "$PBXPROJ_PATH"
+          sed -i '' '/DEVELOPMENT_TEAM =/d' "$PBXPROJ_PATH"
+          sed -i '' '/PROVISIONING_PROFILE_SPECIFIER =/d' "$PBXPROJ_PATH"
 
           if [ -n "$WORKSPACE" ]; then
             xcodebuild archive \

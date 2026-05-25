@@ -174,14 +174,8 @@ export const DocumentList = ({
 
 	const render_right_actions = useCallback((id: string) => (
 		<Pressable
-			onPress={() => handle_delete_document(id)}
-			style={{
-				backgroundColor: 'red',
-				justifyContent: 'center',
-				alignItems: 'center',
-				width: 80, height: '100%',
-			}}
-		>
+			style={sx.swipeDelete}
+			onPress={() => handle_delete_document(id)}>
 			<Ionicons name='trash' size={22} color='#FFF' />
 		</Pressable>
 	), []);
@@ -194,7 +188,7 @@ export const DocumentList = ({
 			entering={FadeInDown.duration(300).springify()}
 			layout={LinearTransition.springify()}
 			style={{
-				borderRadius: 12,
+				borderRadius: 24,
 				overflow: 'hidden', marginBottom: 8
 			}}
 		>
@@ -261,7 +255,7 @@ export const DocumentList = ({
 						sx.fab,
 						{ transform: [{ scale: pressed ? 0.92 : 1 }] }
 					]}>
-					<Ionicons name='add' size={32} color='#FFFFFF'/>
+					<Ionicons name='add' size={32} color={sx.title.color}/>
 				</Pressable>
 			</View>
 		)}

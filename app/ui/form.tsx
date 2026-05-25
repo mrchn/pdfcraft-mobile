@@ -61,7 +61,9 @@ export const ClientForm = ({
 				<ScrollView
 					contentContainerStyle={sx.scroll_content}
 				>
-					<Text style={sx.section_title}>VARIABLES</Text>
+					<Text style={sx.section_title}>
+						DOCUMENT VARIABLES
+					</Text>
 					{fields.length > 0 ? (
 						fields.map((field) => (
 							<TextInput

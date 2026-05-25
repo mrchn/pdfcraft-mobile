@@ -1,115 +1,84 @@
 // @/app/ui/theme
-
-import {StyleSheet, Platform} from 'react-native';
+import {StyleSheet, Platform, useColorScheme} from 'react-native';
 
 export const Colors = {
-
 	light: {
-		bg: '#F2F2F7',
-		text: '#000000',
-		accent: '#007AFF',
-		card: '#FFFFFF',
-		info: '#8E8E93'
-
+		bg: '#F2F2F7', bgBlur: 'rgba(255, 255, 255, 0.6)',
+		text: '#000000', info: '#8E8E93', card: '#FFFFFF',
+		highlight: 'rgba(255, 255, 255, 0.8)'
 	}, dark: {
-		bg: '#000000',
-		text: '#FFFFFF',
-		accent: '#0A84FF',
-		card: '#1C1C1E',
-		info: '#8E8E93'
+		bg: '#000000', bgBlur: 'rgba(44, 44, 46, 0.6)',
+		text: '#FFFFFF', info: '#8E8E93', card: '#1C1C1E',
+		highlight: 'rgba(255, 255, 255, 0.2)'
 	}
-
 } as const;
 
-export type ThemeType = 'light' | 'dark';
+export type Theme = 'light' | 'dark';
 const cache: Record<string, any> = {};
 
-export const home = (mode: ThemeType) => {
+export function useAppTheme<T>(
+	themeSelect: (mode: 'dark' | 'light') => T): T {
+	const mode = useColorScheme() === 'dark' ? 'dark' : 'light';
+	return themeSelect(mode)
+}
+
+export const home = (mode: Theme) => {
 
 	const key = `home_${mode}`;
 	if (cache[key]) return cache[key];
 	const c = Colors[mode];
 	return (cache[key] = StyleSheet.create({
 
-		root: {
-			flex: 1,
-			backgroundColor: c.bg
-		},
+		root: { flex: 1, backgroundColor: c.bg },
 		header: {
 			flexDirection: 'row',
 			alignItems: 'flex-end',
 			justifyContent: 'space-between',
 			paddingHorizontal: 20,
-			paddingTop: 44,
-			paddingBottom: 16
+			paddingTop: 44, paddingBottom: 16
 		},
-		title: {
-			color: c.text,
-			fontSize: 32,
+		title: { // Ready to craft
+			color: c.text, fontSize: 32,
 			fontFamily: 'ui-monospace'
-		},
-		header_btn: {
-			paddingBottom: 4
 		},
 		search_row: {
 			flexDirection: 'row',
 			alignItems: 'center',
 			paddingHorizontal: 16,
-			marginBottom: 16,
-			gap: 8
+			marginBottom: 16
 		},
-		search_blur: {
-			flex: 1,
-			flexDirection: 'row',
-			alignItems: 'center',
-			borderRadius: 16,
-			height: 48,
-			borderWidth: 1,
-			borderColor: mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.15)',
-			shadowColor: '#000',
-			shadowOffset: { width: 0, height: 4 },
-			shadowOpacity: mode === 'light' ? 0.06 : 0.2,
-			shadowRadius: 8,
+		search: {
+			backgroundColor: c.bgBlur,
+			flex: 1, flexDirection: 'row',
+			alignItems: 'center', height: 48,
+			borderRadius: 16, borderWidth: 0.2,
+			borderColor: c.highlight
 		},
 		search_input: {
-			flex: 1,
-			color: c.text,
-			paddingHorizontal: 16,
-			paddingVertical: 0,
-			fontFamily: 'ui-monospace',
-			fontSize: 17
+			flex: 1, fontFamily: 'ui-monospace',
+			color: c.text, fontSize: 17,
+			paddingHorizontal: 16
 		},
-		cancel_btn: {
-			paddingHorizontal: 8
-		},
+		cancel_btn: { paddingHorizontal: 8 },
 		cancel_text: {
-			color: c.accent,
-			fontSize: 14,
+			color: c.text, fontSize: 14,
 			fontFamily: 'ui-monospace'
 		},
-		list_header: {
-			marginBottom: 8
-		},
+		list_header: { marginBottom: 8 },
 		list_content: {
 			flexGrow: 1,
 			paddingHorizontal: 16,
 			paddingBottom: 100
 		},
 		section_label: {
-			color: c.info,
-			fontSize: 13,
+			color: c.info, fontSize: 13,
 			fontFamily: 'ui-monospace',
-			lineHeight: 16, letterSpacing: 0.5,
 			paddingLeft: 16, marginBottom: 6
 		},
-
-		// LIST ROWS
 		row: {
-			borderWidth: StyleSheet.hairlineWidth,
-			borderColor: mode === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.15)',
 			backgroundColor: c.card,
 			flexDirection: 'row', alignItems: 'center',
-			paddingVertical: 14, paddingHorizontal: 16
+			paddingVertical: 20, paddingHorizontal: 16
 		},
 		icon_wrap: {
 			backgroundColor: c.accent, borderRadius: 8,
@@ -125,6 +94,12 @@ export const home = (mode: ThemeType) => {
 		row_sub: {
 			color: c.info, fontSize: 12, fontWeight: '400'
 		},
+		swipeDelete: {
+			backgroundColor: 'red',
+			justifyContent: 'center',
+			alignItems: 'center',
+			width: 80, height: '100%',
+		},
 		empty: {
 			flex: 1, alignItems: 'center', justifyContent: 'center',
 			paddingBottom: 80, gap: 12
@@ -132,15 +107,13 @@ export const home = (mode: ThemeType) => {
 		empty_text: {
 			color: c.info, fontSize: 14, fontFamily: 'ui-monospace'
 		},
-
-		// FAB
 		fab: {
 			position: 'absolute', bottom: 32, right: 24,
-			width: 56, height: 56,
-			borderRadius: 28,
+			width: 64, height: 64,
+			borderRadius: 32,
 			backgroundColor: mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(44, 44, 46, 0.6)',
-			borderWidth: 1,
-			borderColor: mode === 'light' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.2)',
+			borderWidth: 0.5,
+			borderColor: c.highlight,
 			alignItems: 'center', justifyContent: 'center',
 			shadowColor: '#000',
 			shadowOffset: { width: 0, height: 8 },

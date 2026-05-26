@@ -51,11 +51,14 @@ jobs:
               -archivePath build/pdfcraft-mobile.xcarchive \
               -destination generic/platform=iOS \
               -parallelizeTargets \
+              -quiet \
               CODE_SIGN_IDENTITY="" \
               CODE_SIGNING_REQUIRED=NO \
               CODE_SIGNING_ALLOWED=NO \
               COMPILER_INDEX_STORE_ENABLED=NO \
-              SWIFT_WHOLE_MODULE_OPTIMIZATION=NO
+              SWIFT_WHOLE_MODULE_OPTIMIZATION=NO \
+              MTL_ENABLE_DEBUG_INFO=NO \
+              DEBUG_INFORMATION_FORMAT=dwarf
           else
             xcodebuild archive \
               -project "$PROJECT" \
@@ -64,11 +67,14 @@ jobs:
               -archivePath build/pdfcraft-mobile.xcarchive \
               -destination generic/platform=iOS \
               -parallelizeTargets \
+              -quiet \
               CODE_SIGN_IDENTITY="" \
               CODE_SIGNING_REQUIRED=NO \
               CODE_SIGNING_ALLOWED=NO \
               COMPILER_INDEX_STORE_ENABLED=NO \
-              SWIFT_WHOLE_MODULE_OPTIMIZATION=NO
+              SWIFT_WHOLE_MODULE_OPTIMIZATION=NO \
+              MTL_ENABLE_DEBUG_INFO=NO \
+              DEBUG_INFORMATION_FORMAT=dwarf
           fi
 
           cd build/pdfcraft-mobile.xcarchive/Products/Applications/

@@ -7,7 +7,7 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'false'
 
 jobs:
-  build-ios:
+  Build-unsigned-ipa:
     runs-on: macos-latest
 
     steps:
@@ -27,10 +27,17 @@ jobs:
         run: |
           npx expo prebuild --platform ios --clean --no-install
 
+      - name: Cache CocoaPods
+        uses: actions/cache@v4
+        with:
+          path: ios/Pods
+          key: pods-${{ hashFiles('package-lock.json') }}
+          restore-keys: pods-
+
       - name: Build unsigned .ipa using xcodebuild
         run: |
           cd ios
-          pod install --repo-update
+          pod install
 
           WORKSPACE=$(find . -maxdepth 1 -name "*.xcworkspace" | head -n 1)
           PROJECT=$(find . -maxdepth 1 -name "*.xcodeproj" | head -n 1)

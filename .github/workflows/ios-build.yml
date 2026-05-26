@@ -50,9 +50,12 @@ jobs:
               -configuration Release \
               -archivePath build/pdfcraft-mobile.xcarchive \
               -destination generic/platform=iOS \
+              -parallelizeTargets \
               CODE_SIGN_IDENTITY="" \
               CODE_SIGNING_REQUIRED=NO \
-              CODE_SIGNING_ALLOWED=NO
+              CODE_SIGNING_ALLOWED=NO \
+              COMPILER_INDEX_STORE_ENABLED=NO \
+              SWIFT_WHOLE_MODULE_OPTIMIZATION=NO
           else
             xcodebuild archive \
               -project "$PROJECT" \
@@ -60,9 +63,12 @@ jobs:
               -configuration Release \
               -archivePath build/pdfcraft-mobile.xcarchive \
               -destination generic/platform=iOS \
+              -parallelizeTargets \
               CODE_SIGN_IDENTITY="" \
               CODE_SIGNING_REQUIRED=NO \
-              CODE_SIGNING_ALLOWED=NO
+              CODE_SIGNING_ALLOWED=NO \
+              COMPILER_INDEX_STORE_ENABLED=NO \
+              SWIFT_WHOLE_MODULE_OPTIMIZATION=NO
           fi
 
           cd build/pdfcraft-mobile.xcarchive/Products/Applications/

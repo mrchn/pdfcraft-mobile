@@ -9,7 +9,7 @@
 			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
-			<string>Enable local conversion</string>
+			<string>Enable Local Conversion</string>
 			<key>Key</key>
 			<string>enable_local_convert</string>
 			<key>DefaultValue</key>

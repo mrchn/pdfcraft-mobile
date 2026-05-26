@@ -26,6 +26,10 @@ module.exports = function withSettingsBundle(config) {
 		}
 		const res = xcodeProject.getFirstProject().firstProject;
 		if (res && res.knownRegions) {
+			if (!res.knownRegions.includes('en')) {
+				res.knownRegions.push('en')
+				console.log('[settingsbundle] added en')
+			}
 			if (!res.knownRegions.includes('ru')) {
 				res.knownRegions.push('ru');
 				console.log('[settingsbundle] added ru')

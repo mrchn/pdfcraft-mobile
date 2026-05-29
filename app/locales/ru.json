@@ -4,5 +4,14 @@
 	"documentVariables": "ПЕРЕМЕННЫЕ ШАБЛОНА",
 	"craft": "СОЗДАТЬ",
 	"fieldsEmpty": "поля пустые :(",
-	"docsNotFound": "ничего не найдено"
+
+	"docExists": "Шаблон уже добавлен.",
+	"docsNotFound": "ничего не найдено",
+
+	"serverError": "ОШИБКА СЕРВЕРА",
+	"serverResponse": "ОТВЕТ СЕРВЕРА",
+	"serverIsWakingUp": "СЕРВЕР ПРОСЫПАЕТСЯ",
+	"serverWait": "Подождите примерно 40 секунд и попробуйте снова.",
+
+	"craftError": "Произошла ошибка во время сборки."
 }

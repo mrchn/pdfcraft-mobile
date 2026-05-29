@@ -1,8 +1,17 @@
 {
 	"search": "search for templates...",
 	"cancel": "cancel",
-	"documentVariables": "DOCUMENT VARIABLES",
+	"documentVariables": "TEMPLATE VARIABLES",
 	"craft": "CRAFT",
 	"fieldsEmpty": "fields is empty :(",
-	"docsNotFound": "no documents found"
+
+	"docExists": "Document already exists.",
+	"docsNotFound": "no documents found",
+
+	"serverError": "SERVER ERROR",
+	"serverResponse": "SERVER RESPONSE",
+	"serverIsWakingUp": "SERVER IS WAKING UP",
+	"serverWait": "Wait about 40 seconds and try again.",
+
+	"craftError": "Something went wrong while building."
 }

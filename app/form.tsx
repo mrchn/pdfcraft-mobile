@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {Ionicons} from '@expo/vector-icons';
-import {useAppTheme, form as theme} from '@/app/ui/theme';
+import {useAppTheme, form as theme} from '@/app/theme';
 import {
 	TextInput, ScrollView,
 	Modal, View, Text, Platform, TouchableOpacity,

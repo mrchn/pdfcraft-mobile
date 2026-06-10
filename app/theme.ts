@@ -1,4 +1,4 @@
-// @/app/ui/theme
+// @/app/theme
 import {StyleSheet, Platform, useColorScheme} from 'react-native';
 
 export const Colors = {
@@ -105,6 +105,25 @@ export const home = (mode: Theme) => {
 		empty_text: {
 			color: c.info, fontSize: 14, fontFamily: 'ui-monospace'
 		},
+		fab_wrapper: {
+			position: 'absolute',
+			bottom: 24, right: 24,
+			borderRadius: 32,
+			overflow: 'hidden',
+		},
+		fab_glass: {
+			// position: 'absolute', bottom: 32, right: 24,
+			width: 64, height: 64,
+			borderRadius: 32,
+			// backgroundColor: mode === 'light' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(44, 44, 46, 0.6)',
+			// borderWidth: 0.5,
+			// borderColor: c.highlight,
+			alignItems: 'center', justifyContent: 'center',
+			shadowColor: '#000',
+			shadowOffset: { width: 0, height: 8 },
+			shadowOpacity: mode === 'light' ? 0.12 : 0.3,
+			shadowRadius: 12,
+		},
 		fab: {
 			position: 'absolute', bottom: 32, right: 24,
 			width: 64, height: 64,
@@ -149,7 +168,6 @@ export const form = (mode: Theme) => {
 			marginTop: 10, textAlign: 'center'
 		},
 
-		// TEXT FIELDS
 		input: {
 			backgroundColor: 'rgba(255, 255, 255, 0.06)',
 			color: c.text,
@@ -160,7 +178,6 @@ export const form = (mode: Theme) => {
 			borderWidth: 1,
 			borderColor: mode === 'light' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.08)',
 		},
-		// FILLED BUTTON — m3 primary action
 		submit_btn_wrap: {
 			paddingHorizontal: 20,
 			paddingBottom: Platform.OS === 'ios' ? 70 : 50,

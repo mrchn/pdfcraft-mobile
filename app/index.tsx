@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { GlassView, isLiquidGlassAvailable } from 'expo-glass-effect';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import { useTranslation } from 'react-i18next';
@@ -389,15 +390,38 @@ export default function HomeScreen() {
 			/>
 			{!is_converting && (
 				<View>
-					<Pressable
-						style={({ pressed }) => [
+					{isLiquidGlassAvailable() ? (
+						<GlassView
+							style={sx.fab_wrapper}
+							tint='light' intensity={90}
+							cornerRadius={32}
+							glassEffectStyle='clear'
+						>
+							<Pressable
+								style={({ pressed }) => [
+									sx.fab_glass,
+									{ transform: [{
+										scale:pressed?0.92:1
+									}]}]}
+								onPress={handle_pick_document}>
+								<Ionicons
+									name='add' size={32}
+									color={sx.title.color}/>
+							</Pressable>
+						</GlassView>
+					) : (
+						<Pressable
+							style={({ pressed }) => [
 							sx.fab,
-							{transform:[{scale:pressed?0.92:1}]}]}
-						onPress={handle_pick_document}>
-						<Ionicons
-							name='add' size={32}
-							color={sx.title.color}/>
-					</Pressable>
+							{ transform: [{
+								scale:pressed?0.92:1
+							}]}]}
+							onPress={handle_pick_document}>
+							<Ionicons
+								name='add' size={32}
+								color={sx.title.color}/>
+						</Pressable>
+					)}
 				</View>
 			)}
 			<ClientForm

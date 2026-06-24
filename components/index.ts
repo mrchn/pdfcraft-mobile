@@ -1,5 +1,6 @@
 // @/components (pdfcraft-mobile)
 
 export { Form } from './form';
+export { Picker, DOCX_MIME } from './picker';
 export { hapticTap } from './haptics';
-export { FormProps, Doc } from './interfaces'
+export * from './interfaces'

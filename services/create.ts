@@ -3,9 +3,9 @@
 import { Alert } from 'react-native';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
-import { Parse, Generate } from './server';
 
-const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+import { DOCX_MIME } from '@/components';
+import { Parse, Generate } from './server';
 
 type Params = {
 	doc: { uri: string; title: string; };

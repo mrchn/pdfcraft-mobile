@@ -16,8 +16,8 @@ import {
 	ActivityIndicator, Settings } from 'react-native';
 
 import { Create, Parse } from '@/services';
-import { Form, Doc, hapticTap } from '@/components';
 import { useAppTheme, home as theme } from '@/theme';
+import { Form, Doc, Picker, hapticTap } from '@/components';
 
 const serverUrl = Settings.get('server_url')
 	? Settings.get('server_url')
@@ -30,10 +30,10 @@ export default function HomeScreen() {
 
 	const [query, set_query] = useState('');
 	const [is_loaded, set_is_loaded] = useState(false);
-	const [documents, set_documents] = useState<Doc[]>([]);
+	const [docs, setDocs] = useState<Doc[]>([]);
 	const [form_visible, set_form_visible] = useState(false);
 	const [is_converting, set_is_converting] = useState(false);
-	const has_docs = documents.length > 0;
+	const has_docs = docs.length > 0;
 
 	const [
 		detected_fields, set_detected_fields
@@ -43,22 +43,16 @@ export default function HomeScreen() {
 	] = useState<{ uri: string; title: string } | null>(null);
 
 	const create = async (data: Record<string, string>) => {
-
 		if (!picked_doc) { return }
 		set_form_visible(false);
 		set_is_converting(true);
-
 		try {
 			await Create({
-				doc: picked_doc,
-				data: data,
-				url: serverUrl,
-				t: t
+				doc: picked_doc, data: data, url: serverUrl, t: t
 			})
 		} catch {
 			Alert.alert(
-				`${ t('serverIsWakingUp' )}`,
-				`${ t('serverWait') }`,
+				`${ t('serverIsWakingUp' )}`, `${ t('serverWait') }`,
 				[{ text: 'OK' }]
 			)
 		} finally {
@@ -76,7 +70,7 @@ export default function HomeScreen() {
 					const text_data = await FileSystem.readAsStringAsync(db_uri);
 					const saved_docs = JSON.parse(text_data);
 					if (Array.isArray(saved_docs)) {
-						set_documents(saved_docs)
+						setDocs(saved_docs)
 					}
 				}
 			} catch {} finally { set_is_loaded(true) }
@@ -85,21 +79,25 @@ export default function HomeScreen() {
 
 	useEffect(() => { // авто-save при изменении листа
 		if (!is_loaded) return;
+		let cancelled = false;
 		const save_documents = async () => {
 			try {
 				const db_uri = `${FileSystem.documentDirectory}doc_db.json`;
-				const text_data = JSON.stringify(documents);
-				await FileSystem.writeAsStringAsync(
-					db_uri, text_data
+				if (!cancelled) {
+					await FileSystem.writeAsStringAsync(
+						db_uri, JSON.stringify(docs)
 					)
+				}
 			} catch {}
-		}; save_documents()
-	}, [documents, is_loaded]);
+		};
+		save_documents()
+		return () => { cancelled = true }
+	}, [docs, is_loaded]);
 
 	// удаление из списка по id
 	const handle_delete_document = useCallback((id: string) => {
 		hapticTap();
-		set_documents(
+		setDocs(
 			(prev_docs) => prev_docs.filter(
 				(doc) => doc.id !== id
 				)
@@ -107,64 +105,9 @@ export default function HomeScreen() {
 	}, []);
 
 	// и дальше добавление :>
-	const handle_pick_document = async () => {
-		try {
-			hapticTap();
-			const result = await DocumentPicker.getDocumentAsync({
-				type: [
-					'application/msword', DOCX_MIME,
-				], copyToCacheDirectory: true
-			});
-			if (!result.canceled && result.assets && result.assets[0]) {
-				const picked_file = result.assets[0];
-				const file_size_bytes = picked_file.size;
+	const { pick } = Picker({docs, setDocs});
 
-				const already_exists = documents.some(
-					d => d.title === picked_file.name
-					);
-				if (already_exists) {
-					Alert.alert(
-						':(', `${t('docExists')}`,
-						[{ text: 'OK' }]
-						);
-					return
-				}
-
-				// default значение для маленьких файлов
-				let file_size_mb = '0.1 MB';
-				if (file_size_bytes) {
-					const size_in_mb = file_size_bytes / (1024 * 1024);
-					file_size_mb = size_in_mb < 0.1 
-						? `${(file_size_bytes / 1024).toFixed(0)} KB` 
-						: `${size_in_mb.toFixed(1)} MB`;
-				}
-
-				// создаем новый док в список
-				const new_doc: Doc = {
-					id: Date.now().toString(),
-					title: picked_file.name,
-					size: file_size_mb,
-					date:
-						'Today, '
-						+ new Date().toLocaleTimeString(
-							[], {
-								hour: '2-digit',
-								minute: '2-digit'
-							}),
-					icon: 'document-text',
-					color: '#1F4E79',
-					uri: picked_file.uri
-				};
-
-				hapticTap();
-				set_documents(
-					(prev_docs) => [new_doc, ...prev_docs]
-					)
-			}
-		} catch {}
-	};
-
-	const filtered = documents.filter(
+	const filtered = docs.filter(
 		(d) => d.title.toLowerCase().includes(
 			query.toLowerCase()
 			)
@@ -298,7 +241,7 @@ export default function HomeScreen() {
 					{ transform: [{
 						scale:pressed?0.92:1
 					}]}]}
-					onPress={handle_pick_document}>
+					onPress={pick}>
 					<Ionicons
 						name='add' size={32}
 						color={sx.title.color}/>

@@ -1,47 +1,53 @@
 {
-	"expo": {
-		"name": "pdfcraft", "slug": "pdfcraft-mobile",
-		"version": "0.2.0", "orientation": "portrait",
-		"icon": "./app/icons/icon.png",
-		"scheme": "pdfcraftmobile",
-		"userInterfaceStyle": "automatic",
-		"newArchEnabled": true,
-		"ios": {
-			"supportsTablet": true,
-			"bundleIdentifier": "ru.mrchn.craft", "buildNumber": "4",
-			"infoPlist": {
-				"ITSAppUsesNonExemptEncryption": false,
-				"CFBundleLocalizations": ["en", "ru"],
-				"CFBundleDevelopmentRegion": "en"
-			}
-		},
-		"android": {
-			"package": "ru.mrchn.craft", "versionCode": 4,
-			"adaptiveIcon": {
-				"backgroundColor": "#FFFFFF",
-				"foregroundImage":
-					"./app/icons/android-icon-foreground.png",
-				"monochromeImage":
-					"./app/icons/android-icon-monochrome.png"
-			},
-			"edgeToEdgeEnabled": true,
-			"predictiveBackGestureEnabled": false
-		},
-		"plugins": [
-			"expo-router",
-			"expo-localization",
-			"./plugins/settingsbundle.js"
-		],
-		"experiments": {
-			"typedRoutes": true,
-			"reactCompiler": true,
-			"tsconfigPaths": true
-		},
-		"extra": {
-			"router": {},
-			"eas": {
-				"projectId": "dcc55f1b-8b92-4df7-8307-dc277430a48a"
-			}
-		}
-	}
+  "expo": {
+    "name": "pdfcraft",
+    "slug": "pdfcraft-mobile",
+    "version": "0.2.0",
+    "orientation": "portrait",
+    "icon": "./assets/icons/icon.png",
+    "scheme": "pdfcraftmobile",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "ru.mrchn.craft",
+      "buildNumber": "4",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "CFBundleLocalizations": [
+          "en",
+          "ru"
+        ],
+        "CFBundleDevelopmentRegion": "en"
+      }
+    },
+    "android": {
+      "package": "ru.mrchn.craft",
+      "versionCode": 4,
+      "adaptiveIcon": {
+        "backgroundColor": "#FFFFFF",
+        "foregroundImage": "./assets/icons/android-icon-foreground.png",
+        "monochromeImage": "./assets/icons/android-icon-monochrome.png"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-router",
+      "expo-localization",
+      "./plugins/settingsbundle.js",
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true,
+      "tsconfigPaths": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "dcc55f1b-8b92-4df7-8307-dc277430a48a"
+      }
+    }
+  }
 }

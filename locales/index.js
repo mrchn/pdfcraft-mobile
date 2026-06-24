@@ -1,5 +1,6 @@
 /* eslint-disable import/no-named-as-default-member */
-// @/app/locales
+// @/locales
+
 import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';

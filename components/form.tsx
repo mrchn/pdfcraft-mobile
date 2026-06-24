@@ -1,23 +1,24 @@
-// @/app/ui/form
+// @/components/form (pdfcraft-mobile)
 
 import React, { useState, useEffect } from 'react';
-import {Ionicons} from '@expo/vector-icons';
-import {useAppTheme, form as theme} from '@/app/theme';
-import {
-	TextInput, ScrollView,
-	Modal, View, Text, Platform, TouchableOpacity,
-	KeyboardAvoidingView
-} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
+import {
+	TextInput, ScrollView, Modal, View, Text, Platform,
+	TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+
+import FormProps from '@/components';
+import { useAppTheme, form as theme } from '@/theme';
 
 interface ClientFormProps {
 	visible: boolean; on_close: () => void; fields: string[];
 	on_submit: (data: Record<string, string>) => void
 }
 
-export const ClientForm = ({
+export const Form = ({
 		visible, on_close, fields = [], on_submit
 	}: ClientFormProps) => {
+
 	const {t} = useTranslation();
 	const sx = useAppTheme(theme);
 
@@ -58,7 +59,7 @@ export const ClientForm = ({
 					</TouchableOpacity>
 				</View>
 				<ScrollView
-					contentContainerStyle={sx.scroll_content}
+					contentContainerStyle={{padding: 20}}
 				>
 					<Text style={sx.section_title}>
 						{t('documentVariables')}
@@ -87,7 +88,8 @@ export const ClientForm = ({
 				</ScrollView>
 				<View style={sx.submit_btn_wrap}>
 					<TouchableOpacity
-						style={sx.submit_btn} onPress={handle_submit}
+						style={sx.submit_btn}
+						onPress={handle_submit}
 					>
 						<Text style={sx.submit_text}>
 							{t('craft')}
@@ -98,4 +100,3 @@ export const ClientForm = ({
 		</Modal>
 	)
 }
-export default function Route() { return null }

@@ -1,13 +1,15 @@
 // @/modules/convert (pdfcraft-mobile)
 
-import { NativeModules } from 'react-native';
+import { requireNativeModule } from 'expo-modules-core';
 
 export async function localConvert (
 	docxPath: string, outputPath: string
 ): Promise<boolean> {
 
-	const ConvertModule = NativeModules.Convert || NativeModules.ExpoConvert;
-	if (!Convert) return false;
+	let ConvertModule: any;
+	try { ConvertModule = requireNativeModule('Convert') }
+	catch { return false }
+
 	try {
 		const cleanDocx = docxPath.replace('file://', '');
 		const cleanOutput = outputPath.replace('file://', '');

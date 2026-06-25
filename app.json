@@ -2,7 +2,7 @@
 	"expo": {
 		"name": "pdfcraft",
 		"slug": "pdfcraft-mobile",
-		"version": "0.3.2",
+		"version": "0.3.3",
 		"orientation": "portrait",
 		"icon": "./assets/icons/icon.png",
 		"scheme": "pdfcraftmobile",
@@ -11,7 +11,7 @@
 		"ios": {
 			"supportsTablet": true,
 			"bundleIdentifier": "ru.mrchn.craft",
-			"buildNumber": "28",
+			"buildNumber": "29",
 			"infoPlist": {
 				"ITSAppUsesNonExemptEncryption": false,
 				"CFBundleLocalizations": [
@@ -23,7 +23,7 @@
 		},
 		"android": {
 			"package": "ru.mrchn.craft",
-			"versionCode": 28,
+			"versionCode": 29,
 			"adaptiveIcon": {
 				"backgroundColor": "#FFFFFF",
 				"foregroundImage":

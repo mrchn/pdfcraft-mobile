@@ -10,14 +10,9 @@ import {
 import FormProps from '@/components';
 import { useAppTheme, form as theme } from '@/theme';
 
-interface ClientFormProps {
-	visible: boolean; on_close: () => void; fields: string[];
-	on_submit: (data: Record<string, string>) => void
-}
-
 export const Form = ({
 		visible, on_close, fields = [], on_submit
-	}: ClientFormProps) => {
+	}: FormProps) => {
 
 	const {t} = useTranslation();
 	const sx = useAppTheme(theme);

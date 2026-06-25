@@ -16,7 +16,12 @@ public class ConvertModule: Module {
 				let docxUrl = URL(fileURLWithPath: docxPath)
 				let outputUrl = URL(fileURLWithPath: outputPath)
 
-				self.webView = WKWebView()
+				self.webView = WKWebView(
+					frame: CGRect(
+						x: 0, y: 0,
+						width: 816, height: 1056
+					)
+				)
 				self.webView?.loadFileURL(
 					docxUrl,
 					allowingReadAccessTo:

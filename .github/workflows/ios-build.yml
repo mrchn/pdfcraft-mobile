@@ -23,64 +23,12 @@ jobs:
       - name: Install dependencies (Node.js)
         run: npm ci
 
-      - name: Debug local module
-        run: |
-          pwd
-          ls -la
-          ls -la modules
-          ls -la modules/ios-native-convert
-          cat modules/ios-native-convert/package.json
-          cat modules/ios-native-convert/expo-module.config.json
-          npm ls ios-native-convert
-
-      - name: Debug Expo autolinking
-        run: |
-          npx expo-modules-autolinking resolve --platform apple
+      - name: Setup CocoaPods
+        uses: maxim-lobanov/setup-cocoapods@v1
 
       - name: Generate native iOS project (expo-prebuild)
         run: |
           npx expo prebuild --platform ios --clean
-
-      - name: Inspect generated Podfile properties
-        run: |
-          cat ios/Podfile.properties.json || true
-
-      - name: Resolve after prebuild
-        run: |
-          cd ios
-          npx expo-modules-autolinking resolve --platform apple
-
-      - name: Inspect Podfile
-        run: |
-          sed -n '1,120p' ios/Podfile
-
-      - name: Check generated Podfile
-        run: |
-          grep -n "IosNativeConvert" ios/Podfile || true
-
-      - name: Cache CocoaPods
-        uses: actions/cache@v4
-        with:
-          path: ios/Pods
-          key: pods-${{ hashFiles('ios/Podfile.lock') }}
-          restore-keys: pods-
-
-      - name: Expo install (--check)
-        run: |
-          npx expo install --check
-
-      - name: Debug react-native-config
-        run: |
-          npx expo-modules-autolinking react-native-config --platform ios
-
-      - name: Pod install
-        run: |
-          cd ios
-          pod install
-
-      - name: Check Podfile.lock
-        run: |
-          grep -n "IosNativeConvert" ios/Podfile.lock || true
 
       - name: Check Pods project
         run: |

@@ -2,6 +2,7 @@
   "name": "pdfcraft-mobile",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "workspaces": ["modules/*"],
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -11,7 +12,7 @@
     "lint": "expo lint"
   },
   "dependencies": {
-    "ios-native-convert": "file:./modules/ios-native-convert",
+    "ios-native-convert": "*",
     "@expo/vector-icons": "^15.1.1",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-navigation/native": "^7.1.8",

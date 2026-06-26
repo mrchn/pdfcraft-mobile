@@ -18,10 +18,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'npm'
+          cache: 'yarn'
 
-      - name: Install dependencies (Node.js)
-        run: npm ci
+      - name: Install dependencies (Yarn)
+        run: yarn install --frozen-lockfile
 
       - name: Setup CocoaPods
         uses: maxim-lobanov/setup-cocoapods@v1

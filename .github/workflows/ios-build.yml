@@ -41,6 +41,19 @@ jobs:
         run: |
           npx expo prebuild --platform ios --clean --no-install
 
+      - name: Inspect generated Podfile properties
+        run: |
+          cat ios/Podfile.properties.json || true
+
+      - name: Resolve after prebuild
+        run: |
+          cd ios
+          npx expo-modules-autolinking resolve --platform apple
+
+      - name: Inspect Podfile
+        run: |
+          sed -n '1,120p' ios/Podfile
+
       - name: Check generated Podfile
         run: |
           grep -n "IosNativeConvert" ios/Podfile || true

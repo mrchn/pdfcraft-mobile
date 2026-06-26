@@ -85,7 +85,6 @@ export async function Create ({ doc, data, url, t }: Params) {
 		};
 
 		await FileSystem.deleteAsync(uri, { idempotent: true });
-		await FileSystem.deleteAsync(pdf_uri, { idempotent: true });
 		return true
 
 	} else {

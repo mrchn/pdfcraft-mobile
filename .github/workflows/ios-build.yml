@@ -25,6 +25,8 @@ jobs:
 
       - name: Setup CocoaPods
         uses: maxim-lobanov/setup-cocoapods@v1
+        with:
+          version: latest
 
       - name: Generate native iOS project (expo-prebuild)
         run: |

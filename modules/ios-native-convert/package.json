@@ -6,7 +6,11 @@
 	"exports": {
 		".": "./index.ts"
 	},
+	"keywords": ["ios"],
 	"expo-module": {
 		"platforms": ["apple"]
+	},
+	"peerDependencies": {
+		"expo": "*"
 	}
 }

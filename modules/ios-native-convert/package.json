@@ -4,6 +4,6 @@
 	"main": "index.ts",
 	"private": true,
 	"expo-module": {
-		"platforms": ["ios"]
+		"platforms": ["apple"]
 	}
 }

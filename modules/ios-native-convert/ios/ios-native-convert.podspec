@@ -1,4 +1,4 @@
-# @/modules/ios-native-convert/ios/IosNativeConvert.podspec
+# @/modules/ios-native-convert/ios/ios-native-convert.podspec
 
 Pod::Spec.new do |s|
   s.name           = 'IosNativeConvert'

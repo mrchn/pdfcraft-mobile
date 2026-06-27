@@ -3,6 +3,7 @@
 	"ios": {
 		"modules": [
 			"IosNativeConvertModule"
-		]
+		],
+		"debugOnly": false
 	}
 }

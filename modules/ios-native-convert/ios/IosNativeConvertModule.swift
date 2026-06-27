@@ -59,16 +59,21 @@ class NavigationDelegate: NSObject, WKNavigationDelegate {
 		_ webView: WKWebView, didFinish navigation: WKNavigation!
 	) {
 		guard #available(iOS 14.5, *) else { return fail() }
-		webView.createPDF(configuration: WKPDFConfiguration()) {
-			[weak self] result in
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			[weak self] in
 			guard let self = self else { return }
-			switch result {
-				case .success(let data): self.promise.resolve(
-					(try? data.write(to: self.outputUrl)) != nil
-				)
-				case .failure: self.promise.resolve(false)
+
+			webView.createPDF(configuration: WKPDFConfiguration()) {
+				[weak self] result in
+				guard let self = self else { return }
+				switch result {
+					case .success(let data): self.promise.resolve(
+						(try? data.write(to: self.outputUrl)) != nil
+					)
+					case .failure: self.promise.resolve(false)
+				}
+				self.onComplete()
 			}
-			self.onComplete()
 		}
 	}
 

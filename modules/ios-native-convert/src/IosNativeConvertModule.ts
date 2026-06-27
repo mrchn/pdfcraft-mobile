@@ -6,4 +6,9 @@ declare class IosNativeConvertModule extends NativeModule {
 	convert(docxPath: string, outputPath: string): Promise<boolean>
 }
 
-export default requireNativeModule<IosNativeConvertModule>('IosNativeConvert')
+let _mod: IosNativeConvertModule | null = null;
+
+try { _mod = requireNativeModule<IosNativeConvertModule>('IosNativeConvert') }
+catch {}
+
+export default _mod

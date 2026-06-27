@@ -1,25 +1,17 @@
-# @/modules/ios-native-convert/ios/ios-native-convert.podspec
+# @/modules/ios-native-convert/ios-native-convert.podspec
 
 Pod::Spec.new do |s|
   s.name           = 'ios-native-convert'
-  s.version        = '1.0.0'
-  s.summary        = 'A sample project summary'
-  s.description    = 'A sample project description'
-  s.author         = ''
-  s.homepage       = 'https://docs.expo.dev/modules/'
-  s.platforms      = {
-    :ios => '15.1',
-    :tvos => '15.1'
-  }
+  s.version        = '0.1.0'
+  s.summary        = 'webkit pdf convert'
+  s.description    = 'a native webkit pdf converter'
+  s.author         = 'mrchn'
+  s.platform       = :ios, '15.1'
   s.source         = { git: '' }
   s.static_framework = true
-
   s.dependency 'ExpoModulesCore'
-
-  # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
   }
-
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 end

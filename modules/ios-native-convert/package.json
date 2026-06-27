@@ -16,6 +16,7 @@
 		}
 	},
 	"peerDependencies": {
-		"expo": "*"
+		"expo": "*",
+		"expo-modules-core": "*"
 	}
 }

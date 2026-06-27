@@ -19,10 +19,10 @@ module.exports = function withSettingsBundle(config) {
 		}
 		const xcodeProject = config.modResults;
 		if (!xcodeProject.hasFile('Settings.bundle')) {
-			const projectName = config.modRequest.projectName;
-			xcodeProject.addResourceFile(
-				'Settings.bundle', null, projectName
-			)
+			if (!xcodeProject.pbxGroupByName('Resources')) {
+				xcodeProject.pbxCreateGroup('Resources', '""')
+			}
+			xcodeProject.addResourceFile('Settings.bundle')
 		}
 		const res = xcodeProject.getFirstProject().firstProject;
 		if (res && res.knownRegions) {

@@ -1,21 +1,12 @@
 {
 	"name": "ios-native-convert",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"main": "index.ts",
-	"plugin": "./app.plugin.js",
 	"private": true,
 	"exports": {
 		".": "./index.ts"
 	},
 	"keywords": ["expo-module", "ios"],
-	"expo-module": {
-		"platforms": ["ios"],
-		"ios": {
-			"modules": [
-				"IosNativeConvertModule"
-			]
-		}
-	},
 	"peerDependencies": {
 		"expo": "*",
 		"expo-modules-core": "*"

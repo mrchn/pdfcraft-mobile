@@ -2,7 +2,7 @@
 	"expo": {
 		"name": "pdfcraft",
 		"slug": "pdfcraft-mobile",
-		"version": "0.3.3",
+		"version": "0.3.4",
 		"orientation": "portrait",
 		"icon": "./assets/icons/icon.png",
 		"scheme": "pdfcraftmobile",
@@ -11,7 +11,7 @@
 		"ios": {
 			"supportsTablet": true,
 			"bundleIdentifier": "ru.mrchn.craft",
-			"buildNumber": "61",
+			"buildNumber": "62",
 			"infoPlist": {
 				"ITSAppUsesNonExemptEncryption": false,
 				"CFBundleLocalizations": [
@@ -25,8 +25,7 @@
 			"expo-router",
 			"expo-localization",
 			"expo-font",
-			"./plugins/settingsbundle.js",
-			"./plugins/withIosNativeConvert.js"
+			"./plugins/settingsbundle.js"
 		],
 		"experiments": {
 			"typedRoutes": true,

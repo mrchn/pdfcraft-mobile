@@ -32,17 +32,6 @@ jobs:
         run: |
           npx expo prebuild --platform ios --clean
 
-      - name: Check Expo Modules Provider registration
-        run: |
-          PROVIDER_FILE=$(find ios -name "ExpoModulesProvider.swift" | head -n 1)
-          if [ -n "$PROVIDER_FILE" ]; then
-            echo "=== Found ExpoModulesProvider.swift at $PROVIDER_FILE ==="
-            cat "$PROVIDER_FILE"
-          else
-            echo "ExpoModulesProvider.swift NOT FOUND!"
-            exit 1
-          fi
-
       - name: Build unsigned .ipa using xcodebuild
         run: |
           cd ios

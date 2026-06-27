@@ -11,7 +11,7 @@
 		"ios": {
 			"supportsTablet": true,
 			"bundleIdentifier": "ru.mrchn.craft",
-			"buildNumber": "53",
+			"buildNumber": "54",
 			"infoPlist": {
 				"ITSAppUsesNonExemptEncryption": false,
 				"CFBundleLocalizations": [
@@ -24,8 +24,9 @@
 		"plugins": [
 			"expo-router",
 			"expo-localization",
+			"expo-font",
 			"./plugins/settingsbundle.js",
-			"expo-font"
+			"ios-native-convert"
 		],
 		"experiments": {
 			"typedRoutes": true,

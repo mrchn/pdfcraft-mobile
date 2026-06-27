@@ -11,15 +11,14 @@ import Animated, {
 	LinearTransition } from 'react-native-reanimated';
 import {
 	FlatList, Pressable, View, Text, TextInput, Alert,
-	ActivityIndicator, Settings } from 'react-native';
+	ActivityIndicator } from 'react-native';
 
 import { Create, Parse } from '@/services';
 import { useAppTheme, home as theme } from '@/theme';
 import { Form, Doc, Picker, hapticTap } from '@/components';
 
 const DB_URI = `${FileSystem.documentDirectory}doc_db.json`;
-const serverUrl = Settings.get('server_url')
-	|| 'https://pdfcraft-mobile-backend.onrender.com';
+const serverUrl = 'https://pdfcraft-mobile-backend.onrender.com';
 
 export default function HomeScreen() {
 

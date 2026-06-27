@@ -7,7 +7,7 @@ import {
 	TextInput, ScrollView, Modal, View, Text, Platform,
 	TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 
-import FormProps from '@/components';
+import { FormProps } from '@/components';
 import { useAppTheme, form as theme } from '@/theme';
 
 export const Form = ({

@@ -6,7 +6,6 @@ import * as Sharing from 'expo-sharing';
 
 import { Generate } from './server';
 import { localConvert } from '@/modules/ios-native-convert';
-import { moduleLoadError } from '@/modules/ios-native-convert/src/IosNativeConvertModule';
 
 type Params = {
 	doc: { uri: string; title: string; };
@@ -27,10 +26,7 @@ export async function Create ({ doc, data, t }: Params) {
 		const isConvertedLocally = await localConvert(uri, pdf_uri);
 
 		if (!isConvertedLocally) {
-			Alert.alert(
-				t('error'),
-				moduleLoadError ?? 'module loaded, convert returned false'
-			)
+			Alert.alert(t('craft'), t('craftError'));
 			return false
 		}
 

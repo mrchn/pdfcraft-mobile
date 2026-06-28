@@ -24,7 +24,7 @@ export const Generate = async (
 				`\\{${tag}\\{${tag}\\s*${tag}` +
 				`${esc_key}` +
 				`\\s*${tag}\\}${tag}\\}`, 'g'
-			), value)
+			), () => value)
 		});
 		zip.file('word/document.xml', xml);
 		const uri = FileSystem.documentDirectory + `craft_${title}`;

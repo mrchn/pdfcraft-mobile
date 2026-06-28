@@ -84,7 +84,7 @@ jobs:
           mkdir Payload
           cp -R *.app Payload/
 
-          zip -r ../../../../pdfcraft-mobile.ipa Payload
+          zip -ry ../../../../pdfcraft-mobile.ipa Payload
 
           cd $GITHUB_WORKSPACE
 

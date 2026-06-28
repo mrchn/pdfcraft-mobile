@@ -56,6 +56,7 @@ jobs:
               COMPILER_INDEX_STORE_ENABLED=NO \
               SWIFT_WHOLE_MODULE_OPTIMIZATION=NO \
               MTL_ENABLE_DEBUG_INFO=NO \
+              DEAD_CODE_STRIPPING=NO \
               DEBUG_INFORMATION_FORMAT=dwarf
           else
             xcodebuild archive \
@@ -72,6 +73,7 @@ jobs:
               COMPILER_INDEX_STORE_ENABLED=NO \
               SWIFT_WHOLE_MODULE_OPTIMIZATION=NO \
               MTL_ENABLE_DEBUG_INFO=NO \
+              DEAD_CODE_STRIPPING=NO \
               DEBUG_INFORMATION_FORMAT=dwarf
           fi
 

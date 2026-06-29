@@ -25,7 +25,7 @@
 			"expo-router",
 			"expo-localization",
 			"expo-font",
-			"./plugins/settingsbundle.js"
+			"./settingsbundle.js"
 		],
 		"experiments": {
 			"typedRoutes": true,

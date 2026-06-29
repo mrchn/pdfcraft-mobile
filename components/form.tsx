@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import {
-	TextInput, ScrollView, Modal, View, Text, Platform,
+	TextInput, ScrollView, Modal, View, Text,
 	TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 
 import { FormProps } from '@/components';

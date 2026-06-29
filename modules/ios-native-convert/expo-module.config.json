@@ -1,7 +1,0 @@
-{
-	"name": "IosNativeConvert",
-	"platforms": ["apple"],
-	"apple": {
-		"modules": ["IosNativeConvertModule"]
-	}
-}

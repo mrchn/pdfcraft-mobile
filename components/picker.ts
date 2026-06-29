@@ -1,37 +1,34 @@
-// @/components/picker (pdfcraft-mobile)
+// @/components/picker
 
 import { useState, useCallback } from 'react'
 import * as DocumentPicker from 'expo-document-picker'
-import { Alert } from 'react-native'
 import { useTranslation } from 'react-i18next'
-
 import { hapticTap } from './haptics'
 import type { PickerProps, Doc } from './interfaces'
 
-export const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+export const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 
 export function Picker ({ docs, setDocs }: PickerProps) {
-
-	const { t } = useTranslation();
-	const [isLoading, setIsLoading] = useState(false);
+	const { t } = useTranslation()
+	const [isLoading, setIsLoading] = useState(false)
 
 	const pick = useCallback(async () => {
 		try {
-			setIsLoading(true);
-			hapticTap();
+			setIsLoading(true)
+			hapticTap()
 			const res = await DocumentPicker.getDocumentAsync({
 				type: ['application/msword', DOCX_MIME],
 				copyToCacheDirectory: true
-			});
-			const file = res.assets?.[0];
+			})
+			const file = res.assets?.[0]
 			if (!res.canceled && file) {
 				if (docs.some(d => d.title === file.name)) {
-					return Alert.alert(':(', t('docExists'))
+					return false
 				}
-				const kb = (file.size || 0) / 1024;
+				const kb = (file.size || 0) / 1024
 				const fileSizeFormatted = kb < 102.4
 					? `${kb.toFixed(0)} KB`
-					: `${(kb / 1024).toFixed(1)} MB`;
+					: `${(kb / 1024).toFixed(1)} MB`
 				setDocs(prev => [{
 					id: Date.now().toString(),
 					title: file.name, size: fileSizeFormatted,
@@ -39,10 +36,10 @@ export function Picker ({ docs, setDocs }: PickerProps) {
 						[], { hour: '2-digit', minute: '2-digit' }
 					)}`, icon: 'document-text', color: '#1F4E79',
 					uri: file.uri
-				}, ...prev]);
+				}, ...prev])
 				hapticTap()
 			}
 		} catch {} finally { setIsLoading(false) }
-	}, [docs, setDocs, t]);
+	}, [docs, setDocs, t])
 	return { pick, isLoading }
 }

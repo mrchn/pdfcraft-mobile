@@ -4,13 +4,9 @@ import * as FileSystem from 'expo-file-system/legacy'
 import * as Sharing from 'expo-sharing'
 import { Generate } from './server'
 import { convertPDF } from './convert'
+import type { CreateProps } from './interfaces'
 
-type Params = {
-	doc: { uri: string ; title: string }
-	data: Record<string, string>
-}
-
-export async function Create({ doc, data }: Params) {
+export async function Create({ doc, data }: CreateProps) {
 	const uri = await Generate(doc.uri, doc.title, data)
 	if (!uri) return false
 	try {

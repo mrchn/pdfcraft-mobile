@@ -1,6 +1,6 @@
-// @/components (pdfcraft-mobile)
+// @/components
 
-export * from './form';
-export * from './picker';
-export * from './haptics';
+export * from './form'
+export * from './picker'
+export * from './haptics'
 export * from './interfaces'

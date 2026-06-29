@@ -33,6 +33,8 @@ jobs:
           npx expo prebuild --platform ios --clean
 
       - name: Build unsigned .ipa using xcodebuild
+        env:
+          BUNDLE_IN_DEBUG: 'true'
         run: |
           cd ios
 
@@ -80,27 +82,14 @@ jobs:
           fi
 
           cd build/pdfcraft-mobile.xcarchive/Products/Applications/
+          APP_NAME=$(ls -d *.app | head -n 1)
 
-          mkdir Payload
-          cp -R *.app Payload/
+          mkdir $GITHUB_WORKSPACE/Payload
+          ditto "$APP_NAME" $GITHUB_WORKSPACE/Payload/"$APP_NAME"
 
-          ditto -c -k Payload $GITHUB_WORKSPACE/pdfcraft-mobile.ipa
-
-          cd $GITHUB_WORKSPACE
-
-      - name: Get direct download link for mobile
-        continue-on-error: true
-        run: |
-          echo "========================================================"
-          LINK=$(curl -F "file=@./pdfcraft-mobile.ipa" https://0x0.st)
-          LINK=$(echo $RESPONSE | grep -o '"link":"[^"]*' | grep -o '[^"]*$')
-          echo "ССЫЛКА ДЛЯ СКАЧИВАНИЯ НА ТЕЛЕФОН:"
-          echo "$LINK"
-          echo "========================================================"
-
-      - name: Upload .ipa artifact
+      - name: Upload Payload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pdfcraft-mobile
-          path: pdfcraft-mobile.ipa
+          name: pdfcraft-payload
+          path: Payload/
           retention-days: 14

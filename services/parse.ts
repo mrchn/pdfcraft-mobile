@@ -1,17 +1,18 @@
-// @/services/parse (pdfcraft-mobile)
+// @/services/parse
 
-import JSZip from 'jszip';
-import * as FileSystem from 'expo-file-system/legacy';
+import JSZip from 'jszip'
+import { readAsStringAsync } from 'expo-file-system/legacy'
 
 export const Parse = async (uri: string): Promise<string[]> => {
 	try {
 		const zip = await JSZip.loadAsync(
-			await FileSystem.readAsStringAsync(
+			await readAsStringAsync(
 				uri, { encoding: 'base64' }
 			), { base64: true }
-		);
-		const xml = await zip.file('word/document.xml')?.async('text');
-		if (!xml) return [];
+		)
+		const xml = await zip.file('word/document.xml')
+			?.async('text')
+		if (!xml) return []
 		return [...new Set(
 			(
 				xml.replace(/<[^>]+>/g, '')

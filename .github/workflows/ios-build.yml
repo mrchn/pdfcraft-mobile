@@ -37,7 +37,7 @@ jobs:
           npx react-native bundle \
             --platform ios \
             --dev false \
-            --entry-file index.js \
+            --entry-file index.tsx \
             --bundle-output ios/main.jsbundle \
             --assets-dest ios
 

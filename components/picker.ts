@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react'
 import * as DocumentPicker from 'expo-document-picker'
 import { useTranslation } from 'react-i18next'
 import { hapticTap } from './haptics'
-import type { PickerProps, Doc } from './interfaces'
+import type { PickerProps } from '@/types'
 
 export const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 

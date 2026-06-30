@@ -21,7 +21,13 @@ export function ooxml_to_html (xml: string): string {
 			out.push(`<table style="border-collapse:collapse;width:100%;margin-bottom:12px">${rows}</table>`)
 		}
 		else if (para) {
-			const style = para.match(/<w:pStyle w:val="([^"]+)"/)?.[1] ?? ''
+			const pPr = para.match(/<w:pPr[ >][\s\S]*?<\/w:pPr>/)?.[0] ?? ''
+			const style = pPr.match(/<w:pStyle w:val="([^"]+)"/)?.[1] ?? ''
+			const jc = pPr.match(/<w:jc w:val="([^"]+)"/)?.[1] ?? ''
+			let textAlign = ''
+			if (jc === 'center') textAlign = 'center'
+			else if (jc === 'right') textAlign = 'right'
+			else if (jc === 'both') textAlign = 'justify'
 			let content = ''
 			for (const [run] of para.matchAll(/<w:r[ >][\s\S]*?<\/w:r>/g)) {
 				const bold = /<w:b[ \/]/.test(run)
@@ -35,13 +41,14 @@ export function ooxml_to_html (xml: string): string {
 				if (italic) t = `<i>${t}</i>`
 				content += t
 			}
-			if (!content.trim()) {
-				out.push('<p></p>')
-				continue
-			}
+			if (!content.trim()) { out.push('<p></p>') ; continue }
 			const tag = /^Heading1$/.test(style) ? 'h1'
 				: /^Heading2$/.test(style) ? 'h2' : 'p'
-			out.push(`<${tag}>${content}</${tag}>`)
+			const cssStyles = []
+			if (textAlign) cssStyles.push(`text-align:${textAlign}`)
+			const styleAttr = cssStyles.length
+				? ` style="${cssStyles.join(';')}"` : ''
+			out.push(`<${tag}${styleAttr}>${content}</${tag}>`)
 		}
 	} return out.join('')
 }

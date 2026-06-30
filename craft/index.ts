@@ -29,7 +29,7 @@ export async function Create({ doc, data, t }: CreateProps) {
 				`\\s*${tag}\\}${tag}\\}`, 'g'
 			), () => value)
 		})
-		await new Promise(resolve => setTimeout(resolve, 600))
+		await new Promise(r => setTimeout(r, 1000))
 		const { uri: tmp } = await printToFileAsync({
 			html:
 				`<!DOCTYPE html><html><body style="font-family` +

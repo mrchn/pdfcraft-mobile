@@ -25,7 +25,6 @@ export const Form = ({
 				keyboardVerticalOffset={16}>
 				<View style={sx.header}>
 					<View style={{width: 24}}/>
-					<Text style={sx.title}></Text>
 					<TouchableOpacity onPress={on_close}>
 						<Ionicons
 							name='close-circle' size={sx.closeBtn.size}

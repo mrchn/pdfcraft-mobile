@@ -19,6 +19,8 @@ export interface PickerProps {
 	setDocs: React.Dispatch<React.SetStateAction<Doc[]>>
 }
 
+export type PickedProps = { uri: string; title: string } | null
+
 export type TemplateProps = {
 	temp: string, title: string
 	data: Record<string, string>

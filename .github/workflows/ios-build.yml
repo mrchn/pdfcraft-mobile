@@ -32,18 +32,7 @@ jobs:
         run: |
           npx expo prebuild --platform ios --clean
 
-      - name: Bundle JavaScript
-        run: |
-          npx react-native bundle \
-            --platform ios \
-            --dev false \
-            --entry-file app/index.tsx \
-            --bundle-output ios/main.jsbundle \
-            --assets-dest ios
-
       - name: Build unsigned .ipa using xcodebuild
-        env:
-          SKIP_BUNDLING: '1'
         run: |
           cd ios
 
@@ -55,51 +44,45 @@ jobs:
             xcodebuild archive \
               -workspace "$WORKSPACE" \
               -scheme "$SCHEME" \
-              -configuration Debug \
+              -configuration Release \
               -archivePath build/pdfcraft-mobile.xcarchive \
               -destination generic/platform=iOS \
               -parallelizeTargets \
               -quiet \
-              -allowProvisioningUpdates \
               CODE_SIGN_IDENTITY="" \
               CODE_SIGNING_REQUIRED=NO \
               CODE_SIGNING_ALLOWED=NO \
               COMPILER_INDEX_STORE_ENABLED=NO \
               SWIFT_WHOLE_MODULE_OPTIMIZATION=NO \
               MTL_ENABLE_DEBUG_INFO=NO \
-              DEAD_CODE_STRIPPING=NO \
               DEBUG_INFORMATION_FORMAT=dwarf
           else
             xcodebuild archive \
               -project "$PROJECT" \
               -scheme "$SCHEME" \
-              -configuration Debug \
+              -configuration Release \
               -archivePath build/pdfcraft-mobile.xcarchive \
               -destination generic/platform=iOS \
               -parallelizeTargets \
               -quiet \
-              -allowProvisioningUpdates \
               CODE_SIGN_IDENTITY="" \
               CODE_SIGNING_REQUIRED=NO \
               CODE_SIGNING_ALLOWED=NO \
               COMPILER_INDEX_STORE_ENABLED=NO \
               SWIFT_WHOLE_MODULE_OPTIMIZATION=NO \
               MTL_ENABLE_DEBUG_INFO=NO \
-              DEAD_CODE_STRIPPING=NO \
               DEBUG_INFORMATION_FORMAT=dwarf
           fi
 
           cd build/pdfcraft-mobile.xcarchive/Products/Applications/
-          APP_NAME=$(ls -d *.app | head -n 1)
-
-          mkdir -p "$GITHUB_WORKSPACE/Payload"
-          ditto "$APP_NAME" "$GITHUB_WORKSPACE/Payload/$APP_NAME"
+          mkdir Payload
+          cp -R *.app Payload/
+          zip -r ../../../../pdfcraft-mobile.ipa Payload
           cd $GITHUB_WORKSPACE
-          zip -qr pdfcraft-mobile.ipa Payload/
 
-      - name: Upload Payload artifact
+      - name: Upload .ipa artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pdfcraft-ios
-          path: pdfcraft-mobile.ipa
-          retention-days: 14
+          name: pdfcraft-mobile
+          path: ios/pdfcraft-mobile.ipa
+          retention-days: 7

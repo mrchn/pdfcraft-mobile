@@ -1,42 +1,41 @@
 // @/app/index
 
-import React, { useState, useEffect, useCallback } from 'react';
-import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import * as FileSystem from 'expo-file-system/legacy';
-import { useTranslation } from 'react-i18next';
-import { Ionicons } from '@expo/vector-icons';
+import React, { useState, useEffect, useCallback } from 'react'
+import Swipeable from 'react-native-gesture-handler/Swipeable'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import * as FileSystem from 'expo-file-system/legacy'
+import { useTranslation } from 'react-i18next'
+import { Ionicons } from '@expo/vector-icons'
 import Animated, {
 	FadeIn, FadeOut, FadeInDown,
-	LinearTransition } from 'react-native-reanimated';
+	LinearTransition } from 'react-native-reanimated'
 import {
 	FlatList, Pressable, View, Text, TextInput, Alert,
-	ActivityIndicator } from 'react-native';
+	ActivityIndicator } from 'react-native'
 
-import { Create, Parse } from '@/services';
-import { useAppTheme, home as theme } from '@/theme';
-import { Form, Doc, Picker, hapticTap } from '@/components';
+import { Create, Parse } from '@/craft'
+import { useAppTheme, home as theme } from '@/theme'
+import { Form, Doc, Picker, hapticTap } from '@/components'
 
-const DB_URI = `${FileSystem.documentDirectory}doc_db.json`;
+const DB_URI = `${FileSystem.documentDirectory}doc_db.json`
 
 export default function HomeScreen() {
+	const {t} = useTranslation()
+	const sx = useAppTheme(theme)
 
-	const {t} = useTranslation();
-	const sx = useAppTheme(theme);
-
-	const [query, set_query] = useState('');
-	const [is_loaded, set_is_loaded] = useState(false);
-	const [docs, setDocs] = useState<Doc[]>([]);
-	const [form_visible, set_form_visible] = useState(false);
-	const [is_converting, set_is_converting] = useState(false);
-	const has_docs = docs.length > 0;
+	const [query, set_query] = useState('')
+	const [is_loaded, set_is_loaded] = useState(false)
+	const [docs, setDocs] = useState<Doc[]>([])
+	const [form_visible, set_form_visible] = useState(false)
+	const [is_converting, set_is_converting] = useState(false)
+	const has_docs = docs.length > 0
 
 	const [
 		detected_fields, set_detected_fields
-	] = useState<string[]>([]);
+	] = useState<string[]>([])
 	const [
 		picked_doc, set_picked_doc
-	] = useState<{ uri: string; title: string } | null>(null);
+	] = useState<{ uri: string; title: string } | null>(null)
 
 	const create = async (data: Record<string, string>) => {
 		if (!picked_doc) { return }
@@ -47,7 +46,7 @@ export default function HomeScreen() {
 			set_is_converting(false);
 			set_picked_doc(null)
 		}
-	};
+	}
 
 	useEffect(() => { (async () => {
 		try {

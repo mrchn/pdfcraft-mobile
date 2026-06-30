@@ -76,3 +76,24 @@ export async function Create({ doc, data }: CreateProps) {
 		FileSystem.deleteAsync(pdf_uri, { idempotent: true })
 	}
 }
+
+export const Parse = async (uri: string): Promise<string[]> => {
+	try {
+		const zip = await JSZip.loadAsync(
+			await FileSystem.readAsStringAsync(
+				uri, { encoding: 'base64' }
+			), { base64: true }
+		)
+		const xml = await zip.file('word/document.xml')
+			?.async('text')
+		if (!xml) return []
+		return [...new Set(
+			(
+				xml.replace(/<[^>]+>/g, '')
+					.match(/\{\{([^\{\}]+?)\}\}/g) || []
+			)
+				.map(m => m.replace(/[\{\}\s\xa0]/g, ''))
+				.filter(Boolean)
+		)]
+	} catch { return [] }
+}

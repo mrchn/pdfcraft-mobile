@@ -96,11 +96,6 @@ export function ooxml_to_html (xml: string): string {
 				: (jc === 'both') ? 'justify'
 				: jc ? '' : styleAlignMap[style] || ''
 
-			if (!textAlign && !jc && (style === 'Title'
-				|| style === 'Heading1'
-				|| style === 'Heading2'
-			)) { textAlign = 'center' }
-
 			let content = ''
 			for (const [run] of para.matchAll(
 				/<w:r[ >][\s\S]*?<\/w:r>/g

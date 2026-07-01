@@ -24,10 +24,13 @@ export async function Create({ doc, data, t }: CreateProps) {
 				.map(c => c.replace(
 					/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'
 				)).join(tag)
+			const safeValue = String(value).replace(/&/g, '&amp;')
+				.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+				.replace(/"/g, '&quot;').replace(/'/g, '&#39;')
 			xml = xml!.replace(new RegExp(
 				`\\{${tag}\\{${tag}\\s*${tag}${esc}` +
 				`\\s*${tag}\\}${tag}\\}`, 'g'
-			), () => value)
+			), () => safeValue)
 		})
 		await new Promise(r => setTimeout(r, 1000))
 		const { uri: tmp } = await printToFileAsync({

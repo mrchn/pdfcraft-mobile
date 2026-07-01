@@ -1,10 +1,18 @@
 // @/craft/ooxml2html
 export function ooxml_to_html (xml: string): string {
+	//console.log('XML_DUMP:', xml.substring(0, 1000))
 	const out: string[] = []
 	const matches = xml.matchAll(
 		/(<w:tbl[ >][\s\S]*?<\/w:tbl>)|(<w:p[ >][\s\S]*?<\/w:p>)/g
 	)
+	const centerStyles = ['Title', 'Subtitle', 'Heading1', 'Heading2']
 	let inList = false
+
+	const styleAlignMap: Record<string, string> = {
+		'Заглавие': 'center',
+		'Надпись': 'center',
+		'Title': 'center',
+	}
 
 	for (const [, tbl, para] of matches) {
 		if (tbl) {
@@ -22,7 +30,11 @@ export function ooxml_to_html (xml: string): string {
 			out.push(`<table style="border-collapse:collapse;width:100%;margin-bottom:12px">${rows}</table>`)
 		}
 		else if (para) {
-			const pPr = para.match(/<w:pPr[ >][\s\S]*?<\/w:pPr>/)?.[0] ?? ''
+			const pPr = para.match(/<w:pPr[^>]*>([\s\S]*?)<\/w:pPr>/i)?.[0] ?? ''
+			const jcMatch = para.match(/<w:jc[^>]*w:val="([^"]+)"/i)
+			const jc = jcMatch ? jcMatch[1] : ''
+			if (jc) console.log('Found alignment:', jc)
+
 			const isList = /<w:numPr/.test(pPr)
 			if (isList && !inList) {
 				out.push('<ul style="margin-top:0;margin-bottom:12px;padding-left:20px">')
@@ -31,13 +43,16 @@ export function ooxml_to_html (xml: string): string {
 				out.push('</ul>') ; inList = false
 			}
 			const style = pPr.match(/<w:pStyle w:val="([^"]+)"/)?.[1] ?? ''
-			const jc = pPr.match(/<w:jc w:val="([^"]+)"/)?.[1] ?? ''
-			const indLeft = pPr.match(/<w:ind[^>]*w:left="(\d+)"/)?.[1]
+			const indLeft = pPr.match(/<w:ind[^>]*w:(?:left|start)="(\d+)"/)?.[1]
 
-			let textAlign = ''
-			if (jc === 'center') textAlign = 'center'
-			else if (jc === 'right') textAlign = 'right'
-			else if (jc === 'both') textAlign = 'justify'
+			let textAlign = (jc === 'center') ? 'center'
+				: (jc === 'right') ? 'right'
+				: (jc === 'both') ? 'justify'
+				: styleAlignMap[style] || ''
+
+			if (!textAlign && (style === 'Title' || style === 'Heading1' || style === 'Heading2')) {
+				textAlign = 'center'
+			}
 
 			let content = ''
 			for (const [run] of para.matchAll(/<w:r[ >][\s\S]*?<\/w:r>/g)) {
@@ -88,6 +103,7 @@ export function ooxml_to_html (xml: string): string {
 
 			const cssStyles = []
 			if (textAlign) cssStyles.push(`text-align:${textAlign}`)
+			cssStyles.push('display:block', 'width:100%')
 
 			if (isList) {
 				const ilvl = pPr.match(/<w:ilvl w:val="(\d+)"/)?.[1]

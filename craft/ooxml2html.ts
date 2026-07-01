@@ -1,5 +1,7 @@
 // @/craft/ooxml2html
 
+const capture = (re: RegExp, t: string) => t.match(re)?.[1] ?? ''
+
 const unescXML = (s: string) => { return s
 	.replace(/&amp;/g, '&')
 	.replace(/&lt;/g, '<')
@@ -84,12 +86,10 @@ export function ooxml_to_html (xml: string): string {
 				out.push('</ul>') ; inList = false
 			}
 
-			const style = pPr.match(
-				/<w:pStyle w:val="([^"]+)"/
-			)?.[1] ?? ''
-			const indLeft = pPr.match(
-				/<w:ind[^>]*w:(?:left|start)="(\d+)"/
-			)?.[1]
+			const style = capture(/<w:pStyle w:val="([^"]+)"/, pPr)
+			const indLeft = capture(
+				/<w:ind[^>]*w:(?:left|start)="(\d+)"/, pPr
+			)
 
 			let textAlign = (jc === 'center') ? 'center'
 				: (jc === 'right') ? 'right'

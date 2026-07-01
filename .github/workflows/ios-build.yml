@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'false'
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: 'true'
 
 jobs:
   Build-unsigned-ipa:
@@ -24,7 +24,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Setup CocoaPods
-        uses: maxim-lobanov/setup-cocoapods@v1
+        uses: step-security/setup-cocoapods@v1
         with:
           version: latest
 
